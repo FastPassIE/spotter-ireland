@@ -48,7 +48,7 @@
 
         /* --- Profile Page Modal --- */
         .profile-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-        .profile-modal-content { background-color: #fefefe; margin: 5% auto; padding: 0; border: 1px solid #888; width: 90%; max-width: 700px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .profile-modal-content { background-color: #fefefe; margin: 2% auto; padding: 0; border: 1px solid #888; width: 95%; max-width: 800px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; }
         .profile-header { background-color: #0056b3; color: white; padding: 20px; border-top-left-radius: 8px; border-top-right-radius: 8px; }
         .profile-header h2 { margin: 0; color: white; }
         .profile-body { padding: 20px; }
@@ -57,47 +57,63 @@
         .profile-close { color: #fff; position: absolute; top: 15px; right: 25px; font-size: 35px; font-weight: bold; cursor: pointer; }
         .profile-close:hover { color: #bbb; }
 
-        /* --- NEW CALENDAR STYLES --- */
-        .booking-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin: 20px 0; }
-        .calendar-day-header { font-weight: bold; text-align: center; padding: 10px 0; border-bottom: 2px solid #eee; }
-        .calendar-day { aspect-ratio: 1; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #fff; border-radius: 4px; font-size: 0.9rem; transition: background-color 0.2s ease; position: relative; }
-        .calendar-day.other-month { color: #ccc; cursor: default; background-color: #f9f9f9; }
-        .calendar-day:hover:not(.other-month) { background-color: #e9ecef; }
-        .calendar-day.selected { background-color: #007bff; color: white; }
-        
-        .time-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            z-index: 10;
-            min-width: 120px;
-            max-height: 200px;
-            overflow-y: auto;
-            display: none; /* Hidden by default */
-        }
-        .time-dropdown-item {
-            padding: 8px 12px;
+        /* --- NEW ACCORDION CALENDAR STYLES --- */
+        .availability-calendar { margin-top: 2rem; }
+        .availability-calendar h3 { margin-bottom: 1.5rem; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
+        .calendar-day { border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden; transition: box-shadow 0.3s ease; }
+        .calendar-day:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .day-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            font-weight: bold;
             cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .day-header:hover { background-color: #e9ecef; }
+        .day-header::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0056b3;
+            transition: transform 0.3s ease;
+        }
+        .calendar-day.active .day-header::after {
+            transform: rotate(45deg);
+        }
+        .time-slots {
+            display: none; /* Hidden by default */
+            padding: 15px 20px;
+            background-color: #fff;
+        }
+        .calendar-day.active .time-slots {
+            display: flex; /* Shown when parent has .active class */
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .time-slot {
+            padding: 8px 15px;
+            border: 1px solid #007bff;
+            color: #007bff;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
             font-size: 0.9rem;
-            border-bottom: 1px solid #eee;
+            transition: all 0.2s ease;
         }
-        .time-dropdown-item:last-child { border-bottom: none; }
-        .time-dropdown-item:hover:not(.taken) { background-color: #f0f0f0; }
-        .time-dropdown-item.taken {
-            color: #999;
-            text-decoration: line-through;
+        .time-slot:hover:not(.taken) { background-color: #007bff; color: white; }
+        .time-slot.taken {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
             cursor: not-allowed;
+            text-decoration: line-through;
         }
-        .time-dropdown-item.selected { background-color: #007bff; color: white; }
-
+        .time-slot.selected { background-color: #28a745; color: white; border-color: #28a745; }
 
         /* --- Booking Summary & Confirmation --- */
-        .booking-summary-container { margin-top: 25px; padding: 15px; background-color: #e9ecef; border-radius: 5px; }
+        .booking-summary-container { margin-top: 25px; padding: 15px; background-color: #e9ecef; border-radius: 5px; display: none; }
         .booking-summary-container h4 { margin-top: 0; }
         .confirm-booking-btn { width: 100%; padding: 15px; font-size: 1.2rem; background-color: #28a745; border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease; }
         .confirm-booking-btn:hover { background-color: #218838; }
@@ -183,10 +199,14 @@
                 <p><strong>Contact:</strong> <span id="profile-contact"></span></p>
                 <p><strong>Pricing:</strong> <span id="profile-pricing"></span></p>
 
-                <h3>Book an Appointment</h3>
-                <div id="booking-calendar"></div>
+                <div class="availability-calendar">
+                    <h3>Available Booking Slots</h3>
+                    <div id="accordion-calendar">
+                        <!-- Calendar days will be injected here by JS -->
+                    </div>
+                </div>
                 
-                <div id="booking-summary-container" style="display: none;">
+                <div id="booking-summary-container">
                     <div class="booking-summary">
                         <h4>Booking Summary</h4>
                         <p id="booking-summary-details"></p>
@@ -262,7 +282,6 @@
         // --- GLOBAL STATE ---
         const bookingState = { slots: {} };
         const currentBookingState = { tradespersonId: null, selectedDate: null, selectedTime: null };
-        let openDropdown = null; // To track the currently open dropdown
 
         // --- FAKE DATA ---
         const tradespeopleData = {
@@ -312,97 +331,102 @@
         function handleFormSubmit(event, formType) { event.preventDefault(); alert(`Thank you! Your ${formType} request has been received.`); closeModal('signin-modal'); event.target.reset(); }
         window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.style.display = 'none'; if (event.target.classList.contains('profile-modal')) closeProfileModal(); };
 
-        // --- PROFILE MODAL & NEW BOOKING LOGIC ---
+        // --- PROFILE MODAL & ACCORDION CALENDAR LOGIC ---
         function openProfileModal(person, category) {
             currentBookingState.tradespersonId = person.id;
+            currentBookingState.selectedDate = null;
+            currentBookingState.selectedTime = null;
+            
             if (!bookingState.slots[person.id]) bookingState.slots[person.id] = {};
+
             document.getElementById('profile-name').innerText = person.name;
             document.getElementById('profile-category').innerText = category.charAt(0).toUpperCase() + category.slice(1);
             document.getElementById('profile-description').innerText = person.description;
             document.getElementById('profile-contact').innerText = person.contact;
             document.getElementById('profile-pricing').innerText = person.pricing;
             document.getElementById('booking-summary-container').style.display = 'none';
-            renderCalendar();
+            
+            renderAccordionCalendar();
             document.getElementById('profile-modal').style.display = 'block';
         }
-        function closeProfileModal() { document.getElementById('profile-modal').style.display = 'none'; if(openDropdown) openDropdown.style.display = 'none'; }
+        function closeProfileModal() { document.getElementById('profile-modal').style.display = 'none'; }
         
-        function renderCalendar() {
-            const calendarEl = document.getElementById('booking-calendar');
-            const month = new Date().getMonth();
-            const year = new Date().getFullYear();
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            let html = '';
-            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            dayNames.forEach(day => html += `<div class="calendar-day-header">${day}</div>`);
-            for (let i = firstDay - 1; i >= 0; i--) html += `<div class="calendar-day other-month"></div>`;
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                html += `
-                    <div class="calendar-day" data-date="${dateStr}" onclick="handleDayClick(event, '${dateStr}')">
-                        ${day}
-                        <div class="time-dropdown" id="dropdown-${dateStr}"></div>
+        function renderAccordionCalendar() {
+            const calendarEl = document.getElementById('accordion-calendar');
+            const today = new Date();
+            calendarEl.innerHTML = ''; // Clear previous calendar
+
+            for (let i = 0; i < 7; i++) {
+                const futureDate = new Date(today);
+                futureDate.setDate(today.getDate() + i);
+                const dateStr = futureDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                const dayName = futureDate.toLocaleDateString('en-IE', { weekday: 'long', day: 'numeric' });
+
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.innerHTML = `
+                    <div class="day-header">${dayName}</div>
+                    <div class="time-slots" data-date="${dateStr}">
+                        <!-- Time slots will be injected here -->
                     </div>
                 `;
-            }
-            calendarEl.innerHTML = html;
-        }
-
-        function handleDayClick(event, dateStr) {
-            event.stopPropagation();
-            const dropdown = document.getElementById(`dropdown-${dateStr}`);
-            
-            // If another dropdown is open, close it first
-            if (openDropdown && openDropdown !== dropdown) {
-                openDropdown.style.display = 'none';
-            }
-            
-            // Toggle current dropdown
-            if (dropdown.style.display === 'block') {
-                dropdown.style.display = 'none';
-                openDropdown = null;
-            } else {
-                renderTimeDropdown(dropdown, dateStr);
-                dropdown.style.display = 'block';
-                openDropdown = dropdown;
+                
+                calendarEl.appendChild(dayEl);
+                renderTimeSlots(dayEl.querySelector('.time-slots'), dateStr);
             }
         }
 
-        function renderTimeDropdown(dropdownEl, dateStr) {
+        function renderTimeSlots(slotsContainerEl, dateStr) {
             const tradespersonId = currentBookingState.tradespersonId;
-            const times = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-            
+            const times = ['9:00 AM', '11:00 AM', '2:00 PM', '4:00 PM'];
+
             if (!bookingState.slots[tradespersonId][dateStr]) {
                 bookingState.slots[tradespersonId][dateStr] = {};
-                const randomTaken = times.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 3) + 1);
+                const randomTaken = times.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2));
                 randomTaken(time => bookingState.slots[tradespersonId][dateStr][time] = true);
             }
             
             let html = '';
             times.forEach(time => {
                 const isTaken = bookingState.slots[tradespersonId][dateStr][time];
-                const classes = isTaken ? 'time-dropdown-item taken' : 'time-dropdown-item';
-                html += `<div class="${classes}" onclick="selectTime('${dateStr}', '${time}', ${!isTaken})">${time} ${isTaken ? '(Booked)' : ''}</div>`;
+                const classes = isTaken ? 'time-slot taken' : 'time-slot';
+                html += `<a href="#" class="${classes}" onclick="selectTime('${dateStr}', '${time}', ${!isTaken})">${time}</a>`;
             });
-            dropdownEl.innerHTML = html;
+            slotsContainerEl.innerHTML = html;
         }
+
+        // Attach a single event listener to the calendar container for event delegation
+        document.getElementById('accordion-calendar').addEventListener('click', function(event) {
+            // Check if a day-header was clicked
+            if (event.target.classList.contains('day-header')) {
+                const allDays = this.querySelectorAll('.calendar-day');
+                const clickedDay = event.target.closest('.calendar-day');
+
+                // Close all other days
+                allDays.forEach(day => day.classList.remove('active'));
+                
+                // Open the clicked day
+                clickedDay.classList.add('active');
+            }
+        });
 
         function selectTime(dateStr, time, isAvailable) {
             if (!isAvailable) return;
+            event.preventDefault();
             
             currentBookingState.selectedDate = dateStr;
             currentBookingState.selectedTime = time;
             
-            // Close the dropdown
-            if(openDropdown) openDropdown.style.display = 'none';
+            // Update UI to show selected time
+            document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+            event.target.classList.add('selected');
             
             // Show summary
             const personName = document.getElementById('profile-name').innerText;
             const detailsEl = document.getElementById('booking-summary-details');
             detailsEl.innerHTML = `
                 <strong>Tradesperson:</strong> ${personName}<br>
-                <strong>Date:</strong> ${new Date(dateStr).toDateString()}<br>
+                <strong>Date:</strong> ${new Date(dateStr).toLocaleDateString('en-IE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}<br>
                 <strong>Time:</strong> ${time}
             `;
             document.getElementById('booking-summary-container').style.display = 'block';
@@ -416,20 +440,12 @@
             
             alert(`Booking Confirmed!\n\nYou have booked ${personName} on ${new Date(selectedDate).toDateString()} at ${selectedTime}.\n\nThis slot is now unavailable to others.`);
             
-            // Reset the modal view
+            // Reset view
             document.getElementById('booking-summary-container').style.display = 'none';
-            // Re-render the dropdown for that day to show the new booking status
-            const dropdown = document.getElementById(`dropdown-${selectedDate}`);
-            if(dropdown) renderTimeDropdown(dropdown, selectedDate);
+            
+            // Re-render the calendar to show the updated slot status
+            renderAccordionCalendar();
         };
-
-        // Close dropdowns when clicking outside the calendar
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.booking-calendar') && openDropdown) {
-                openDropdown.style.display = 'none';
-                openDropdown = null;
-            }
-        });
 
     </script>
 </body>
