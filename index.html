@@ -3,238 +3,681 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotter.ie</title>
+    <title>Spotter.ie - Find Trusted Tradespeople in Ireland</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background: #333; color: #fff; padding: 1em; text-align: center; }
-        nav { background: #444; overflow: hidden; }
-        nav a { float: left; display: block; color: #fff; text-align: center; padding: 14px 20px; text-decoration: none; }
-        nav a:hover { background: #555; }
-        .container { padding: 20px; }
-        .category { margin-bottom: 20px; }
-        .tradesperson { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+        /* --- General Styles --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            background: #0056b3;
+            color: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .main-header p {
+            font-size: 1.2rem;
+            margin: 0.5rem 0 1.5rem 0;
+        }
+
+        .header-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .header-actions button {
+            padding: 8px 15px;
+            margin-left: 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .btn-signup { background-color: #28a745; }
+        .btn-signin { background-color: #007bff; }
+
+        /* --- Modal Styles for Sign In/Up --- */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 400px; border-radius: 8px; position: relative;
+        }
+
+        .close {
+            color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold;
+        }
+
+        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+
+        .modal-content h3 { margin-top: 0; }
+        .modal-content input[type="email"], .modal-content input[type="password"] {
+            width: 100%; padding: 10px; margin: 8px 0 20px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        .modal-content button {
+            width: 100%; padding: 10px; border: none; color: white; cursor: pointer; border-radius: 4px;
+        }
+
+        /* --- Search Bar --- */
+        #search-bar-container { text-align: center; margin-bottom: 2rem; }
+        #search-bar {
+            width: 80%; max-width: 500px; padding: 12px; font-size: 1rem; border: 1px solid #ddd; border-radius: 25px;
+        }
+
+        /* --- Category & Tradesperson Cards --- */
+        .category {
+            background: #fff; margin-bottom: 2rem; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .category h2 {
+            margin-top: 0; border-bottom: 2px solid #0056b3; padding-bottom: 10px; color: #0056b3;
+        }
+
+        .tradesperson-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;
+        }
+
+        .tradesperson {
+            border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px; background-color: #fafafa; transition: box-shadow 0.3s ease;
+        }
+
+        .tradesperson h3 { margin-top: 0; color: #333; }
+        .tradesperson p { margin-bottom: 0.5rem; }
+        .tradesperson .contact-info { font-size: 0.9rem; color: #555; }
+        .tradesperson .pricing { font-weight: bold; color: #0056b3; }
+        .tradesperson .book-button { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; margin-top: 10px; width: 100%; }
+        .tradesperson .book-button:hover { background-color: #218838; }
+
+        /* --- Booking Modal & Calendar --- */
+        .booking-modal .modal-content {
+            width: 90%; max-width: 600px; padding: 0; overflow: hidden;
+        }
+        .booking-modal-header {
+            background-color: #0056b3; color: white; padding: 15px; text-align: center;
+        }
+        .booking-modal-body { padding: 20px; }
+        .booking-calendar {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px;
+        }
+        .calendar-day-header {
+            font-weight: bold; text-align: center; padding: 5px 0;
+        }
+        .calendar-day {
+            aspect-ratio: 1; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #fff; border-radius: 4px; font-size: 0.9rem;
+        }
+        .calendar-day:hover:not(.other-month):not(.unavailable) { background-color: #e9ecef; }
+        .calendar-day.other-month { color: #ccc; cursor: default; }
+        .calendar-day.unavailable { background-color: #dc3545; color: white; cursor: not-allowed; }
+        .calendar-day.selected { background-color: #007bff; color: white; }
+        .booking-time-slots {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 20px;
+        }
+        .time-slot {
+            padding: 10px; border: 1px solid #007bff; background-color: #fff; color: #007bff; border-radius: 5px; cursor: pointer; text-align: center;
+        }
+        .time-slot:hover:not(.taken) { background-color: #007bff; color: white; }
+        .time-slot.taken { background-color: #6c757d; color: white; border-color: #6c757d; cursor: not-allowed; text-decoration: line-through; }
+        .booking-summary {
+            margin-top: 20px; padding: 15px; background-color: #e9ecef; border-radius: 5px;
+        }
+        .booking-summary h4 { margin-top: 0; }
+        .confirm-booking-btn {
+            width: 100%; padding: 15px; font-size: 1.2rem; background-color: #28a745; border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 15px;
+        }
+        .confirm-booking-btn:hover { background-color: #218838; }
+        .confirm-booking-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+
+        /* --- Footer --- */
+        footer {
+            background: #333; color: #fff; text-align: center; padding: 2rem 1rem; margin-top: 2rem;
+        }
+
+        footer h3 { margin-top: 0; }
+        footer form { max-width: 500px; margin: 0 auto; text-align: left; }
+        footer input, footer textarea {
+            width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
-    <header>
+
+    <header class="main-header">
+        <div class="header-actions">
+            <button class="btn-signup" onclick="openModal('signup-modal')">Sign Up</button>
+            <button class="btn-signin" onclick="openModal('signin-modal')">Sign In</button>
+        </div>
         <h1>Spotter.ie</h1>
         <p>Find Trusted Tradespeople in Your Area</p>
     </header>
-    <nav>
-        <a href="#plumbing">Plumbing</a>
-        <a href="#electricians">Electricians</a>
-        <a href="#roofers">Roofers</a>
-        <a href="#painters">Painters</a>
-        <a href="#mechanics">Mechanics</a>
-        <a href="#builders">Builders</a>
-    </nav>
-    <div class="container">
-        <div id="plumbing" class="category">
-            <h2>Plumbing</h2>
-            <div class="tradesperson">
-                <h3>Tom's Plumbing</h3>
-                <p>Description: Reliable and efficient plumbing services.</p>
-                <p>Pricing: Call for a quote.</p>
-                <p>Contact: tom@plumbing.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Jane's Pipe Dreams</h3>
-                <p>Description: Expert in all types of plumbing repairs and installations.</p>
-                <p>Pricing: €50/hour.</p>
-                <p>Contact: jane@pipedreams.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Mike's Leak Busters</h3>
-                <p>Description: Specializing in leak detection and repair.</p>
-                <p>Pricing: €60/hour.</p>
-                <p>Contact: mike@leakbusters.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Sara's Drain Masters</h3>
-                <p>Description: Professional drain cleaning and unblocking services.</p>
-                <p>Pricing: €70/hour.</p>
-                <p>Contact: sara@drainmasters.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>David's Plumbing Solutions</h3>
-                <p>Description: Full-service plumbing for residential and commercial properties.</p>
-                <p>Pricing: €80/hour.</p>
-                <p>Contact: david@plumbingsolutions.ie</p>
-            </div>
-        </div>
 
-        <div id="electricians" class="category">
-            <h2>Electricians</h2>
-            <div class="tradesperson">
-                <h3>Electric Joe</h3>
-                <p>Description: Licensed electrician with over 10 years of experience.</p>
-                <p>Pricing: €60/hour.</p>
-                <p>Contact: joe@electric.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Sparky Solutions</h3>
-                <p>Description: Electrical installations and repairs for homes and businesses.</p>
-                <p>Pricing: €70/hour.</p>
-                <p>Contact: sparky@solutions.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Voltage Veterans</h3>
-                <p>Description: Expert in electrical safety and compliance.</p>
-                <p>Pricing: €80/hour.</p>
-                <p>Contact: voltage@veterans.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Watt's Up Electrical</h3>
-                <p>Description: Residential and commercial electrical services.</p>
-                <p>Pricing: €90/hour.</p>
-                <p>Contact: watts@upelectrical.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Current Affairs Electricians</h3>
-                <p>Description: Emergency electrical services available 24/7.</p>
-                <p>Pricing: €100/hour.</p>
-                <p>Contact: current@affairs.ie</p>
-            </div>
+    <!-- The Sign Up Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signup-modal')">&times;</span>
+            <h3>Join Spotter.ie</h3>
+            <p>Get your first month for only €5!</p>
+            <form onsubmit="handleFormSubmit(event, 'Sign Up')">
+                <label for="signup-email">Email:</label>
+                <input type="email" id="signup-email" name="email" required>
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" name="password" required>
+                <button type="submit" class="btn-signup">Sign Up</button>
+            </form>
         </div>
+    </div>
 
-        <div id="roofers" class="category">
-            <h2>Roofers</h2>
-            <div class="tradesperson">
-                <h3>RoofMaster Ltd.</h3>
-                <p>Description: Comprehensive roofing services for all types of roofs.</p>
-                <p>Pricing: Call for a quote.</p>
-                <p>Contact: roofmaster@roofing.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>TileTek Roofing</h3>
-                <p>Description: Specialists in tile and slate roofing.</p>
-                <p>Pricing: €150/m2.</p>
-                <p>Contact: tiletek@roofing.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Flat Roof Experts</h3>
-                <p>Description: Expertise in flat roof repairs and installations.</p>
-                <p>Pricing: €200/m2.</p>
-                <p>Contact: flatroof@experts.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Gutter Guardians</h3>
-                <p>Description: Gutter cleaning and maintenance services.</p>
-                <p>Pricing: €50/visit.</p>
-                <p>Contact: gutter@guardians.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>RoofSaver Repairs</h3>
-                <p>Description: Emergency roof repairs and leak detection.</p>
-                <p>Pricing: €80/hour.</p>
-                <p>Contact: roofsaver@repairs.ie</p>
-            </div>
+    <!-- The Sign In Modal -->
+    <div id="signin-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signin-modal')">&times;</span>
+            <h3>Sign In to Your Account</h3>
+            <form onsubmit="handleFormSubmit(event, 'Sign In')">
+                <label for="signin-email">Email:</label>
+                <input type="email" id="signin-email" name="email" required>
+                <label for="signin-password">Password:</label>
+                <input type="password" id="signin-password" name="password" required>
+                <button type="submit" class="btn-signin">Sign In</button>
+            </form>
         </div>
+    </div>
 
-        <div id="painters" class="category">
-            <h2>Painters</h2>
-            <div class="tradesperson">
-                <h3>Colorful Creations</h3>
-                <p>Description: Interior and exterior painting services.</p>
-                <p>Pricing: €25/m2.</p>
-                <p>Contact: colorful@creations.ie</p>
+    <!-- The Booking Modal -->
+    <div id="booking-modal" class="modal booking-modal">
+        <div class="modal-content">
+            <div class="booking-modal-header">
+                <h3 id="booking-tradesperson-name">Book a Slot</h3>
             </div>
-            <div class="tradesperson">
-                <h3>PaintPros Ltd.</h3>
-                <p>Description: Professional painting and decorating services.</p>
-                <p>Pricing: €30/m2.</p>
-                <p>Contact: paintpros@painting.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Brush Masters</h3>
-                <p>Description: Specializing in detailed and intricate painting jobs.</p>
-                <p>Pricing: €35/m2.</p>
-                <p>Contact: brush@masters.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Canvas Coatings</h3>
-                <p>Description: High-quality paint jobs for residential and commercial properties.</p>
-                <p>Pricing: €40/m2.</p>
-                <p>Contact: canvas@coatings.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Paint Perfect</h3>
-                <p>Description: Perfect finish guaranteed for all painting projects.</p>
-                <p>Pricing: €45/m2.</p>
-                <p>Contact: paint@perfect.ie</p>
-            </div>
-        </div>
-
-        <div id="mechanics" class="category">
-            <h2>Mechanics</h2>
-            <div class="tradesperson">
-                <h3>AutoFix Garage</h3>
-                <p>Description: Full-service auto repair and maintenance.</p>
-                <p>Pricing: Call for a quote.</p>
-                <p>Contact: autofix@garage.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Engine Experts</h3>
-                <p>Description: Specialists in engine repairs and tuning.</p>
-                <p>Pricing: €80/hour.</p>
-                <p>Contact: engine@experts.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Brake Masters</h3>
-                <p>Description: Expert brake repairs and replacements.</p>
-                <p>Pricing: €100/hour.</p>
-                <p>Contact: brake@masters.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Tire Treads</h3>
-                <p>Description: Tire sales, fitting, and balancing services.</p>
-                <p>Pricing: €50/tire.</p>
-                <p>Contact: tire@treads.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Clutch Control</h3>
-                <p>Description: Clutch repairs and replacements for all vehicle types.</p>
-                <p>Pricing: €120/hour.</p>
-                <p>Contact: clutch@control.ie</p>
-            </div>
-        </div>
-
-        <div id="builders" class="category">
-            <h2>Builders</h2>
-            <div class="tradesperson">
-                <h3>BuildRight Construction</h3>
-                <p>Description: Residential and commercial building services.</p>
-                <p>Pricing: Call for a quote.</p>
-                <p>Contact: buildright@construction.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Wall Masters</h3>
-                <p>Description: Specializing in wall construction and repairs.</p>
-                <p>Pricing: €300/m2.</p>
-                <p>Contact: wall@masters.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Floor Fitters</h3>
-                <p>Description: Expert floor installations and repairs.</p>
-                <p>Pricing: €250/m2.</p>
-                <p>Contact: floor@fitters.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Roof to Foundation</h3>
-                <p>Description: Full-house renovations and extensions.</p>
-                <p>Pricing: Call for a quote.</p>
-                <p>Contact: roofto@foundation.ie</p>
-            </div>
-            <div class="tradesperson">
-                <h3>Concrete Crew</h3>
-                <p>Description: Concrete pouring and finishing services.</p>
-                <p>Pricing: €200/m3.</p>
-                <p>Contact: concrete@crew.ie</p>
+            <div class="booking-modal-body">
+                <div id="booking-calendar"></div>
+                <div id="booking-time-slots-container" style="display:none;">
+                    <h4>Select a Time</h4>
+                    <div id="booking-time-slots" class="booking-time-slots"></div>
+                </div>
+                <div id="booking-summary-container" style="display:none;">
+                    <div class="booking-summary">
+                        <h4>Booking Summary</h4>
+                        <p id="booking-summary-details"></p>
+                    </div>
+                    <button id="confirm-booking-btn" class="confirm-booking-btn">Confirm & Book Instantly</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <div id="search-bar-container">
+            <input type="text" id="search-bar" placeholder="Search for a tradesperson or category..." onkeyup="filterTradespeople()">
+        </div>
+
+        <section id="plumbing" class="category">
+            <h2>Plumbing</h2>
+            <div class="tradesperson-grid">
+                <div class="tradesperson" data-tradesperson-id="tom-plumbing">
+                    <h3>Tom's Plumbing</h3>
+                    <p>Reliable and efficient plumbing services for all your home needs. No job too big or small.</p>
+                    <p class="pricing">Pricing: Call for a free quote.</p>
+                    <p class="contact-info">Contact: tom@plumbing.ie | 087-123-4567</p>
+                    <button class="book-button" onclick="openBookingModal('Tom\'s Plumbing', 'tom-plumbing')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="jane-pipe-dreams">
+                    <h3>Jane's Pipe Dreams</h3>
+                    <p>Expert in all types of plumbing repairs and installations. Fully licensed and insured.</p>
+                    <p class="pricing">Pricing: €50/hour.</p>
+                    <p class="contact-info">Contact: jane@pipedreams.ie | 086-987-6543</p>
+                    <button class="book-button" onclick="openBookingModal('Jane\'s Pipe Dreams', 'jane-pipe-dreams')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="mike-leak-busters">
+                    <h3>Mike's Leak Busters</h3>
+                    <p>Specializing in fast leak detection and repair. Emergency service available.</p>
+                    <p class="pricing">Pricing: €60/hour.</p>
+                    <p class="contact-info">Contact: mike@leakbusters.ie | 085-555-1234</p>
+                    <button class="book-button" onclick="openBookingModal('Mike\'s Leak Busters', 'mike-leak-busters')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="sara-drain-masters">
+                    <h3>Sara's Drain Masters</h3>
+                    <p>Professional drain cleaning and unblocking services. High-pressure jetting available.</p>
+                    <p class="pricing">Pricing: €70 call-out fee.</p>
+                    <p class="contact-info">Contact: sara@drainmasters.ie | 083-222-9876</p>
+                    <button class="book-button" onclick="openBookingModal('Sara\'s Drain Masters', 'sara-drain-masters')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="david-plumbing-solutions">
+                    <h3>David's Plumbing Solutions</h3>
+                    <p>Full-service plumbing for residential and commercial properties. 15 years experience.</p>
+                    <p class="pricing">Pricing: €80/hour.</p>
+                    <p class="contact-info">Contact: david@plumbingsolutions.ie | 089-111-4321</p>
+                    <button class="book-button" onclick="openBookingModal('David\'s Plumbing Solutions', 'david-plumbing-solutions')">Book a Slot</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="electricians" class="category">
+            <h2>Electricians</h2>
+            <div class="tradesperson-grid">
+                <div class="tradesperson" data-tradesperson-id="electric-joe">
+                    <h3>Electric Joe</h3>
+                    <p>Licensed electrician with over 10 years of experience. Safe and reliable service.</p>
+                    <p class="pricing">Pricing: €60/hour.</p>
+                    <p class="contact-info">Contact: joe@electric.ie | 087-234-5678</p>
+                    <button class="book-button" onclick="openBookingModal('Electric Joe', 'electric-joe')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="sparky-solutions">
+                    <h3>Sparky Solutions</h3>
+                    <p>Electrical installations and repairs for homes and businesses. PAT testing also available.</p>
+                    <p class="pricing">Pricing: €70/hour.</p>
+                    <p class="contact-info">Contact: sparky@solutions.ie | 086-345-6789</p>
+                    <button class="book-button" onclick="openBookingModal('Sparky Solutions', 'sparky-solutions')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="voltage-veterans">
+                    <h3>Voltage Veterans</h3>
+                    <p>Expert in electrical safety and compliance. All work certified.</p>
+                    <p class="pricing">Pricing: €80/hour.</p>
+                    <p class="contact-info">Contact: voltage@veterans.ie | 085-456-7890</p>
+                    <button class="book-button" onclick="openBookingModal('Voltage Veterans', 'voltage-veterans')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="whats-up-electrical">
+                    <h3>Watt's Up Electrical</h3>
+                    <p>Residential and commercial electrical services. 24/7 emergency call-outs.</p>
+                    <p class="pricing">Pricing: €90/hour.</p>
+                    <p class="contact-info">Contact: watts@upelectrical.ie | 083-567-8901</p>
+                    <button class="book-button" onclick="openBookingModal('Watt\'s Up Electrical', 'whats-up-electrical')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="current-affairs">
+                    <h3>Current Affairs Electricians</h3>
+                    <p>Specialists in smart home installations and rewiring.</p>
+                    <p class="pricing">Pricing: €100/hour.</p>
+                    <p class="contact-info">Contact: current@affairs.ie | 089-678-9012</p>
+                    <button class="book-button" onclick="openBookingModal('Current Affairs Electricians', 'current-affairs')">Book a Slot</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="roofers" class="category">
+            <h2>Roofers</h2>
+            <div class="tradesperson-grid">
+                <div class="tradesperson" data-tradesperson-id="roofmaster-ltd">
+                    <h3>RoofMaster Ltd.</h3>
+                    <p>Comprehensive roofing services for all types of roofs. Free estimates.</p>
+                    <p class="pricing">Pricing: Call for a quote.</p>
+                    <p class="contact-info">Contact: roofmaster@roofing.ie | 087-345-1111</p>
+                    <button class="book-button" onclick="openBookingModal('RoofMaster Ltd.', 'roofmaster-ltd')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="tiletok-roofing">
+                    <h3>TileTek Roofing</h3>
+                    <p>Specialists in tile and slate roofing. High-quality materials.</p>
+                    <p class="pricing">Pricing: €150/m2.</p>
+                    <p class="contact-info">Contact: tiletek@roofing.ie | 086-456-2222</p>
+                    <button class="book-button" onclick="openBookingModal('TileTek Roofing', 'tiletok-roofing')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="flat-roof-experts">
+                    <h3>Flat Roof Experts</h3>
+                    <p>Expertise in flat roof repairs and installations. Guaranteed work.</p>
+                    <p class="pricing">Pricing: €200/m2.</p>
+                    <p class="contact-info">Contact: flatroof@experts.ie | 085-567-3333</p>
+                    <button class="book-button" onclick="openBookingModal('Flat Roof Experts', 'flat-roof-experts')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="gutter-guardians">
+                    <h3>Gutter Guardians</h3>
+                    <p>Gutter cleaning and maintenance services. Prevent water damage.</p>
+                    <p class="pricing">Pricing: €50/visit.</p>
+                    <p class="contact-info">Contact: gutter@guardians.ie | 083-678-4444</p>
+                    <button class="book-button" onclick="openBookingModal('Gutter Guardians', 'gutter-guardians')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="roofsaver-repairs">
+                    <h3>RoofSaver Repairs</h3>
+                    <p>Emergency roof repairs and leak detection. Fast response.</p>
+                    <p class="pricing">Pricing: €80/hour.</p>
+                    <p class="contact-info">Contact: roofsaver@repairs.ie | 089-789-5555</p>
+                    <button class="book-button" onclick="openBookingModal('RoofSaver Repairs', 'roofsaver-repairs')">Book a Slot</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="painters" class="category">
+            <h2>Painters</h2>
+            <div class="tradesperson-grid">
+                <div class="tradesperson" data-tradesperson-id="colorful-creations">
+                    <h3>Colorful Creations</h3>
+                    <p>Interior and exterior painting services. High-quality finish.</p>
+                    <p class="pricing">Pricing: €25/m2.</p>
+                    <p class="contact-info">Contact: colorful@creations.ie | 087-456-6666</p>
+                    <button class="book-button" onclick="openBookingModal('Colorful Creations', 'colorful-creations')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="paintpros-ltd">
+                    <h3>PaintPros Ltd.</h3>
+                    <p>Professional painting and decorating services. Fully insured.</p>
+                    <p class="pricing">Pricing: €30/m2.</p>
+                    <p class="contact-info">Contact: paintpros@painting.ie | 086-567-7777</p>
+                    <button class="book-button" onclick="openBookingModal('PaintPros Ltd.', 'paintpros-ltd')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="brush-masters">
+                    <h3>Brush Masters</h3>
+                    <p>Specializing in detailed and intricate painting jobs. Meticulous work.</p>
+                    <p class="pricing">Pricing: €35/m2.</p>
+                    <p class="contact-info">Contact: brush@masters.ie | 085-678-8888</p>
+                    <button class="book-button" onclick="openBookingModal('Brush Masters', 'brush-masters')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="canvas-coatings">
+                    <h3>Canvas Coatings</h3>
+                    <p>High-quality paint jobs for residential and commercial properties.</p>
+                    <p class="pricing">Pricing: €40/m2.</p>
+                    <p class="contact-info">Contact: canvas@coatings.ie | 083-789-9999</p>
+                    <button class="book-button" onclick="openBookingModal('Canvas Coatings', 'canvas-coatings')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="paint-perfect">
+                    <h3>Paint Perfect</h3>
+                    <p>Perfect finish guaranteed for all painting projects. Satisfaction guaranteed.</p>
+                    <p class="pricing">Pricing: €45/m2.</p>
+                    <p class="contact-info">Contact: paint@perfect.ie | 089-890-0000</p>
+                    <button class="book-button" onclick="openBookingModal('Paint Perfect', 'paint-perfect')">Book a Slot</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanics" class="category">
+            <h2>Mechanics</h2>
+            <div class="tradesperson-grid">
+                <div class="tradesperson" data-tradesperson-id="autofix-garage">
+                    <h3>AutoFix Garage</h3>
+                    <p>Full-service auto repair and maintenance. Honest and reliable.</p>
+                    <p class="pricing">Pricing: Call for a quote.</p>
+                    <p class="contact-info">Contact: autofix@garage.ie | 087-567-1111</p>
+                    <button class="book-button" onclick="openBookingModal('AutoFix Garage', 'autofix-garage')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="engine-experts">
+                    <h3>Engine Experts</h3>
+                    <p>Specialists in engine repairs and tuning. Performance specialists.</p>
+                    <p class="pricing">Pricing: €80/hour.</p>
+                    <p class="contact-info">Contact: engine@experts.ie | 086-678-2222</p>
+                    <button class="book-button" onclick="openBookingModal('Engine Experts', 'engine-experts')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="brake-masters">
+                    <h3>Brake Masters</h3>
+                    <p>Expert brake repairs and replacements. Safety first.</p>
+                    <p class="pricing">Pricing: €100/hour.</p>
+                    <p class="contact-info">Contact: brake@masters.ie | 085-789-3333</p>
+                    <button class="book-button" onclick="openBookingModal('Brake Masters', 'brake-masters')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="tire-treads">
+                    <h3>Tire Treads</h3>
+                    <p>Tire sales, fitting, and balancing services. All brands available.</p>
+                    <p class="pricing">Pricing: €50/tire.</p>
+                    <p class="contact-info">Contact: tire@treads.ie | 083-890-4444</p>
+                    <button class="book-button" onclick="openBookingModal('Tire Treads', 'tire-treads')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="clutch-control">
+                    <h3>Clutch Control</h3>
+                    <p>Clutch repairs and replacements for all vehicle types. Fast service.</p>
+                    <p class="pricing">Pricing: €120/hour.</p>
+                    <p class="contact-info">Contact: clutch@control.ie | 089-901-5555</p>
+                    <button class="book-button" onclick="openBookingModal('Clutch Control', 'clutch-control')">Book a Slot</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="builders" class="category">
+            <h2>Builders</h2>
+            <div class="tradesperson-grid">
+                <div class="tradesperson" data-tradesperson-id="buildright-construction">
+                    <h3>BuildRight Construction</h3>
+                    <p>Residential and commercial building services. From planning to completion.</p>
+                    <p class="pricing">Pricing: Call for a quote.</p>
+                    <p class="contact-info">Contact: buildright@construction.ie | 087-678-6666</p>
+                    <button class="book-button" onclick="openBookingModal('BuildRight Construction', 'buildright-construction')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="wall-masters">
+                    <h3>Wall Masters</h3>
+                    <p>Specializing in wall construction and repairs. Plastering experts.</p>
+                    <p class="pricing">Pricing: €300/m2.</p>
+                    <p class="contact-info">Contact: wall@masters.ie | 086-789-7777</p>
+                    <button class="book-button" onclick="openBookingModal('Wall Masters', 'wall-masters')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="floor-fitters">
+                    <h3>Floor Fitters</h3>
+                    <p>Expert floor installations and repairs. All types of flooring.</p>
+                    <p class="pricing">Pricing: €250/m2.</p>
+                    <p class="contact-info">Contact: floor@fitters.ie | 085-890-8888</p>
+                    <button class="book-button" onclick="openBookingModal('Floor Fitters', 'floor-fitters')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="roofto-foundation">
+                    <h3>Roof to Foundation</h3>
+                    <p>Full-house renovations and extensions. Quality craftsmanship.</p>
+                    <p class="pricing">Pricing: Call for a quote.</p>
+                    <p class="contact-info">Contact: roofto@foundation.ie | 083-901-9999</p>
+                    <button class="book-button" onclick="openBookingModal('Roof to Foundation', 'roofto-foundation')">Book a Slot</button>
+                </div>
+                <div class="tradesperson" data-tradesperson-id="concrete-crew">
+                    <h3>Concrete Crew</h3>
+                    <p>Concrete pouring and finishing services. Foundations, slabs, and more.</p>
+                    <p class="pricing">Pricing: €200/m3.</p>
+                    <p class="contact-info">Contact: concrete@crew.ie | 089-012-0000</p>
+                    <button class="book-button" onclick="openBookingModal('Concrete Crew', 'concrete-crew')">Book a Slot</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <footer>
         <p>© 2026 Spotter.ie. All rights reserved.</p>
+        <h3>Contact Us</h3>
+        <form onsubmit="handleFormSubmit(event, 'Contact')">
+            <input type="text" id="contact-name" name="name" placeholder="Your Name" required>
+            <input type="email" id="contact-email" name="email" placeholder="Your Email" required>
+            <textarea id="contact-message" name="message" rows="4" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn-signin">Send</button>
+        </form>
     </footer>
+
+    <script>
+        // --- GLOBAL STATE FOR BOOKINGS ---
+        // In a real app, this would be stored in a database.
+        // For this demo, it's stored in the browser's memory.
+        const bookingState = {
+            // Structure: { "tradesperson-id": { "YYYY-MM-DD": { "HH:MM": true } } }
+            // Example: { "tom-plumbing": { "2026-02-20": { "09:00": true, "10:00": true } } }
+            slots: {}
+        };
+
+        // --- MODAL FUNCTIONS ---
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function handleFormSubmit(event, formType) {
+            event.preventDefault();
+            alert(`Thank you! Your ${formType} request has been received (this is a demo).`);
+            closeModal(`${formType.toLowerCase().replace(' ', '-')}-modal`);
+            event.target.reset();
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // --- SEARCH FUNCTION ---
+        function filterTradespeople() {
+            const input = document.getElementById('search-bar');
+            const filter = input.value.toLowerCase();
+            const cards = document.querySelectorAll('.tradesperson');
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(filter) ? '' : 'none';
+            });
+        }
+
+        // --- BOOKING CALENDAR LOGIC ---
+        const currentBookingState = {
+            tradespersonId: null,
+            tradespersonName: null,
+            selectedDate: null,
+            selectedTime: null,
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear()
+        };
+
+        function openBookingModal(name, id) {
+            currentBookingState.tradespersonId = id;
+            currentBookingState.tradespersonName = name;
+            currentBookingState.selectedDate = null;
+            currentBookingState.selectedTime = null;
+            
+            // Initialize state for this tradesperson if it doesn't exist
+            if (!bookingState.slots[id]) {
+                bookingState.slots[id] = {};
+            }
+
+            document.getElementById('booking-tradesperson-name').innerText = `Book with ${name}`;
+            renderCalendar();
+            openModal('booking-modal');
+        }
+
+        function renderCalendar() {
+            const calendarEl = document.getElementById('booking-calendar');
+            const year = currentBookingState.currentYear;
+            const month = currentBookingState.currentMonth;
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            let html = '';
+
+            // Day headers
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => html += `<div class="calendar-day-header">${day}</div>`);
+
+            // Previous month's trailing days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                html += `<div class="calendar-day other-month">${daysInPrevMonth - i}</div>`;
+            }
+
+            // Current month's days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isUnavailable = isDayFullyBooked(currentBookingState.tradespersonId, dateStr);
+                let classes = 'calendar-day';
+                if (isUnavailable) classes += ' unavailable';
+                if (dateStr === currentBookingState.selectedDate) classes += ' selected';
+                html += `<div class="${classes}" data-date="${dateStr}" onclick="selectDate('${dateStr}')">${day}</div>`;
+            }
+
+            // Next month's leading days
+            const totalCells = calendarEl.children.length - 7; // subtract headers
+            const remainingCells = 42 - totalCells; // 6 rows * 7 days
+            for (let day = 1; day <= remainingCells; day++) {
+                html += `<div class="calendar-day other-month">${day}</div>`;
+            }
+
+            calendarEl.innerHTML = html;
+        }
+
+        function isDayFullyBooked(tradespersonId, dateStr) {
+            const times = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00'];
+            const dayBookings = bookingState.slots[tradespersonId][dateStr] || {};
+            return times.every(time => dayBookings[time]);
+        }
+
+        function selectDate(dateStr) {
+            const tradespersonId = currentBookingState.tradespersonId;
+            if (isDayFullyBooked(tradespersonId, dateStr)) {
+                alert('This day is fully booked. Please select another day.');
+                return;
+            }
+
+            currentBookingState.selectedDate = dateStr;
+            currentBookingState.selectedTime = null;
+            renderCalendar(); // Re-render to update selected style
+            renderTimeSlots(dateStr);
+        }
+
+        function renderTimeSlots(dateStr) {
+            const container = document.getElementById('booking-time-slots-container');
+            const slotsEl = document.getElementById('booking-time-slots');
+            const tradespersonId = currentBookingState.tradespersonId;
+            const times = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00'];
+            
+            // Ensure the day's booking object exists
+            if (!bookingState.slots[tradespersonId][dateStr]) {
+                bookingState.slots[tradespersonId][dateStr] = {};
+            }
+
+            let html = '';
+            times.forEach(time => {
+                const isTaken = bookingState.slots[tradespersonId][dateStr][time];
+                const classes = isTaken ? 'time-slot taken' : 'time-slot';
+                html += `<div class="${classes}" onclick="selectTime('${time}', ${!isTaken})">${time} ${isTaken ? '(Taken)' : ''}</div>`;
+            });
+            
+            slotsEl.innerHTML = html;
+            container.style.display = 'block';
+            document.getElementById('booking-summary-container').style.display = 'none'; // Hide summary
+        }
+
+        function selectTime(time, isAvailable) {
+            if (!isAvailable) return;
+            
+            currentBookingState.selectedTime = time;
+            renderTimeSlots(currentBookingState.selectedDate); // Re-render to update selected style
+            renderBookingSummary();
+        }
+
+        function renderBookingSummary() {
+            const container = document.getElementById('booking-summary-container');
+            const detailsEl = document.getElementById('booking-summary-details');
+            
+            detailsEl.innerHTML = `
+                <strong>Tradesperson:</strong> ${currentBookingState.tradespersonName}<br>
+                <strong>Date:</strong> ${new Date(currentBookingState.selectedDate).toDateString()}<br>
+                <strong>Time:</strong> ${currentBookingState.selectedTime}
+            `;
+            container.style.display = 'block';
+        }
+
+        document.getElementById('confirm-booking-btn').onclick = function() {
+            const { tradespersonId, selectedDate, selectedTime, tradespersonName } = currentBookingState;
+            
+            // Mark the slot as taken
+            bookingState.slots[tradespersonId][selectedDate][selectedTime] = true;
+            
+            alert(`Booking confirmed!\n\nYou have booked ${tradespersonName} on ${new Date(selectedDate).toDateString()} at ${selectedTime}.\n\nThis slot is now unavailable to others.`);
+            
+            // Reset the booking modal view
+            document.getElementById('booking-time-slots-container').style.display = 'none';
+            document.getElementById('booking-summary-container').style.display = 'none';
+            renderCalendar(); // Re-render calendar to show the updated availability
+        };
+
+    </script>
 </body>
 </html>
