@@ -6,62 +6,252 @@
     <title>Spotter.ie - Connect with Trusted Irish Tradespeople</title>
     <style>
         /* --- General Styles --- */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; background-color: #f4f4f4; color: #333; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        section { padding: 40px 0; }
-        h1, h2, h3 { color: #0056b3; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        section {
+            padding: 40px 0;
+        }
+        h1, h2, h3 {
+            color: #0056b3;
+        }
 
         /* --- Header & Navigation --- */
-        .main-header { background: #fff; padding: 1rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 500; }
-        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: bold; color: #0056b3; text-decoration: none; }
-        .nav-buttons button { padding: 10px 20px; margin-left: 10px; border: 2px solid #0056b3; background: #fff; color: #0056b3; cursor: pointer; border-radius: 5px; font-size: 1rem; transition: all 0.3s ease; }
-        .nav-buttons button.primary { background: #0056b3; color: #fff; }
-        .nav-buttons button:hover { background: #0056b3; color: #fff; }
+        .main-header {
+            background: #fff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 500;
+        }
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #0056b3;
+            text-decoration: none;
+        }
+        .nav-buttons button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: 2px solid #0056b3;
+            background: #fff;
+            color: #0056b3;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .nav-buttons button.primary {
+            background: #0056b3;
+            color: #fff;
+        }
+        .nav-buttons button:hover {
+            background: #0056b3;
+            color: #fff;
+        }
 
         /* --- Landing Page Section --- */
-        .landing-hero { background: linear-gradient(rgba(0, 86, 179, 0.8), rgba(0, 86, 179, 0.8)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover; color: #fff; text-align: center; padding: 100px 20px; }
-        .landing-hero h1 { font-size: 3rem; color: #fff; margin-bottom: 1rem; }
-        .landing-hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem auto; }
-        .cta-button { display: inline-block; background: #28a745; color: #fff; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-size: 1.2rem; font-weight: bold; transition: background 0.3s ease; }
-        .cta-button:hover { background: #218838; }
+        .landing-hero {
+            background: linear-gradient(rgba(0, 86, 179, 0.8), rgba(0, 86, 179, 0.8)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .landing-hero h1 {
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+        .landing-hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #28a745;
+            color: #fff;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .cta-button:hover {
+            background: #218838;
+        }
 
         /* --- Category Buttons --- */
-        .category-nav { text-align: center; background: #fff; }
-        .category-nav h2 { margin-bottom: 2rem; }
-        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
-        .category-button { background: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; border-radius: 8px; cursor: pointer; text-decoration: none; color: #0056b3; font-weight: bold; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .category-button:hover { transform: translateY(-5px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .category-button .icon { font-size: 2rem; margin-bottom: 10px; }
+        .category-nav {
+            text-align: center;
+            background: #fff;
+        }
+        .category-nav h2 {
+            margin-bottom: 2rem;
+        }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .category-button {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .category-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .category-button .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
 
         /* --- Listings Page --- */
-        #listings-view { display: none; background: #fff; }
-        #listings-view.active { display: block; }
-        .listings-header { padding: 20px 0; border-bottom: 1px solid #eee; }
-        .listings-header h1 { margin: 0; }
-        .tradesperson-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding-top: 20px; }
-        .tradesperson-card { border: 1px solid #e0e0e0; padding: 1.5rem; border-radius: 8px; background-color: #fafafa; cursor: pointer; transition: box-shadow 0.3s ease, transform 0.3s ease; }
-        .tradesperson-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .tradesperson-card h3 { margin-top: 0; }
-        .tradesperson-card p { margin-bottom: 0.5rem; font-size: 0.9rem; }
-        .tradesperson-card .pricing { font-weight: bold; color: #28a745; }
+        #listings-view {
+            display: none;
+            background: #fff;
+        }
+        #listings-view.active {
+            display: block;
+        }
+        .listings-header {
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .listings-header h1 {
+            margin: 0;
+        }
+        .tradesperson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding-top: 20px;
+        }
+        .tradesperson-card {
+            border: 1px solid #e0e0e0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .tradesperson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .tradesperson-card h3 {
+            margin-top: 0;
+        }
+        .tradesperson-card p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .tradesperson-card .pricing {
+            font-weight: bold;
+            color: #28a745;
+        }
 
         /* --- Profile Page Modal --- */
-        .profile-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-        .profile-modal-content { background-color: #fefefe; margin: 2% auto; padding: 0; border: 1px solid #888; width: 95%; max-width: 800px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-height: 95vh; overflow-y: auto; }
-        .profile-header { background-color: #0056b3; color: white; padding: 20px; border-top-left-radius: 8px; border-top-right-radius: 8px; }
-        .profile-header h2 { margin: 0; color: white; }
-        .profile-body { padding: 20px; }
-        .profile-body p { margin-bottom: 1rem; }
-        .profile-body strong { color: #0056b3; }
-        .profile-close { color: #fff; position: absolute; top: 15px; right: 25px; font-size: 35px; font-weight: bold; cursor: pointer; }
-        .profile-close:hover { color: #bbb; }
+        .profile-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .profile-modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 95%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        .profile-header {
+            background-color: #0056b3;
+            color: white;
+            padding: 20px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .profile-header h2 {
+            margin: 0;
+            color: white;
+        }
+        .profile-body {
+            padding: 20px;
+        }
+        .profile-body p {
+            margin-bottom: 1rem;
+        }
+        .profile-body strong {
+            color: #0056b3;
+        }
+        .profile-close {
+            color: #fff;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .profile-close:hover {
+            color: #bbb;
+        }
 
         /* --- NEW ACCORDION CALENDAR STYLES --- */
-        .availability-calendar { margin-top: 2rem; }
-        .availability-calendar h3 { margin-bottom: 1.5rem; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
-        .calendar-day { border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; overflow: hidden; transition: box-shadow 0.3s ease; }
-        .calendar-day:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .availability-calendar {
+            margin-top: 2rem;
+        }
+        .availability-calendar h3 {
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+        .calendar-day {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        .calendar-day:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
         .day-header {
             background-color: #f8f9fa;
             padding: 15px 20px;
@@ -71,7 +261,9 @@
             justify-content: space-between;
             align-items: center;
         }
-        .day-header:hover { background-color: #e9ecef; }
+        .day-header:hover {
+            background-color: #e9ecef;
+        }
         .day-header::after {
             content: '+';
             font-size: 1.5rem;
@@ -102,7 +294,10 @@
             font-size: 0.9rem;
             transition: all 0.2s ease;
         }
-        .time-slot:hover:not(.taken) { background-color: #007bff; color: white; }
+        .time-slot:hover:not(.taken) {
+            background-color: #007bff;
+            color: white;
+        }
         .time-slot.taken {
             background-color: #f8d7da;
             color: #721c24;
@@ -110,298 +305,397 @@
             cursor: not-allowed;
             text-decoration: line-through;
         }
-        .time-slot.selected { background-color: #28a745; color: white; border-color: #28a745; }
+        .time-slot.selected {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
 
         /* --- Booking Summary & Confirmation --- */
-        .booking-summary-container { margin-top: 25px; padding: 15px; background-color: #e9ecef; border-radius: 5px; display: none; }
-        .booking-summary-container h4 { margin-top: 0; }
-        .confirm-booking-btn { width: 100%; padding: 15px; font-size: 1.2rem; background-color: #28a745; border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease; }
-        .confirm-booking-btn:hover { background-color: #218838; }
+        .booking-summary-container {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            display: none;
+        }
+        .booking-summary-container h4 {
+            margin-top: 0;
+        }
+        .confirm-booking-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            background-color: #28a745;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .confirm-booking-btn:hover {
+            background-color: #218838;
+        }
 
         /* --- Modals --- */
-        .modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 400px; border-radius: 8px; position: relative; }
-        .modal .close { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; }
-        .modal .close:hover, .modal .close:focus { color: black; text-decoration: none; cursor: pointer; }
-        .modal-content h3 { margin-top: 0; }
-        .modal-content input[type="email"], .modal-content input[type="password"], .modal-content select { width: 100%; padding: 10px; margin: 8px 0 20px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .modal-content button { width: 100%; padding: 10px; border: none; color: white; cursor: pointer; border-radius: 4px; background-color: #007bff; }
-        .modal-content button:hover { background-color: #0056b3; }
-        .modal-content .pricing-info { text-align: center; margin-bottom: 15px; font-size: 0.9rem; color: #555; }
-        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .modal .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .modal .close:hover, .modal .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-content h3 {
+            margin-top: 0;
+        }
+        .modal-content input[type="email"], .modal-content input[type="password"], .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 20px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            background-color: #007bff;
+        }
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+        .modal-content .pricing-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
         /* --- Footer --- */
-        footer { background: #333; color: #fff; text-align: center; padding: 2rem 1rem; margin-top: 2rem; }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+        }
     </style>
 </head>
 <body>
 
-    <!-- MAIN HEADER -->
-    <header class="main-header">
-        <div class="container">
-            <a href="#" class="logo" onclick="showView('landing')">Spotter.ie</a>
-            <div class="nav-buttons">
-                <button onclick="openModal('signup-modal')">Sign Up</button>
-                <button class="primary" onclick="openModal('signin-modal')">Sign In</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- SIGN UP MODAL -->
-    <div id="signup-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('signup-modal')">&times;</span>
-            <h3>Join Spotter.ie</h3>
-            <form onsubmit="handleSignup(event)">
-                <label for="signup-email">Email:</label>
-                <input type="email" id="signup-email" name="email" required>
-                <label for="signup-password">Password:</label>
-                <input type="password" id="signup-password" name="password" required>
-                <label for="user-type">I am a:</label>
-                <select id="user-type" name="user-type" required onchange="togglePricingInfo()">
-                    <option value="">Select...</option>
-                    <option value="customer">Customer (Free)</option>
-                    <option value="tradesperson">Tradesperson</option>
-                </select>
-                <div id="tradesperson-pricing" class="pricing-info" style="display:none;">
-                    <p>Get your first month for only <strong>€5</strong>!</p>
-                    <p>€25/month thereafter. Cancel anytime.</p>
-                </div>
-                <button type="submit">Sign Up</button>
-            </form>
+<!-- MAIN HEADER -->
+<header class="main-header">
+    <div class="container">
+        <a href="#" class="logo" onclick="showView('landing')">Spotter.ie</a>
+        <div class="nav-buttons">
+            <button onclick="openModal('signup-modal')">Sign Up</button>
+            <button class="primary" onclick="openModal('signin-modal')">Sign In</button>
         </div>
     </div>
+</header>
 
-    <!-- SIGN IN MODAL -->
-    <div id="signin-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('signin-modal')">&times;</span>
-            <h3>Sign In to Your Account</h3>
-            <form onsubmit="handleFormSubmit(event, 'Sign In')">
-                <label for="signin-email">Email:</label>
-                <input type="email" id="signin-email" name="email" required>
-                <label for="signin-password">Password:</label>
-                <input type="password" id="signin-password" name="password" required>
-                <button type="submit">Sign In</button>
-            </form>
+<!-- SIGN UP MODAL -->
+<div id="signup-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('signup-modal')">&times;</span>
+        <h3>Join Spotter.ie</h3>
+        <form onsubmit="handleSignup(event)">
+            <label for="signup-email">Email:</label>
+            <input type="email" id="signup-email" name="email" required>
+            <label for="signup-password">Password:</label>
+            <input type="password" id="signup-password" name="password" required>
+            <label for="user-type">I am a:</label>
+            <select id="user-type" name="user-type" required onchange="togglePricingInfo()">
+                <option value="">Select...</option>
+                <option value="customer">Customer (Free)</option>
+                <option value="tradesperson">Tradesperson</option>
+            </select>
+            <div id="tradesperson-pricing" class="pricing-info" style="display:none;">
+                <p>Get your first month for only <strong>€5</strong>!</p>
+                <p>€25/month thereafter. Cancel anytime.</p>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</div>
+
+<!-- SIGN IN MODAL -->
+<div id="signin-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('signin-modal')">&times;</span>
+        <h3>Sign In to Your Account</h3>
+        <form onsubmit="handleFormSubmit(event, 'Sign In')">
+            <label for="signin-email">Email:</label>
+            <input type="email" id="signin-email" name="email" required>
+            <label for="signin-password">Password:</label>
+            <input type="password" id="signin-password" name="password" required>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div id="profile-modal" class="profile-modal">
+    <div class="profile-modal-content">
+        <span class="profile-close" onclick="closeProfileModal()">&times;</span>
+        <div class="profile-header">
+            <h2 id="profile-name">Tradesperson Name</h2>
+        </div>
+        <div class="profile-body">
+            <p><strong>Category:</strong> <span id="profile-category"></span></p>
+            <p><strong>Description:</strong> <span id="profile-description"></span></p>
+            <p><strong>Contact:</strong> <span id="profile-contact"></span></p>
+            <p><strong>Pricing:</strong> <span id="profile-pricing"></span></p>
+
+            <div class="availability-calendar">
+                <h3>Available Booking Slots</h3>
+                <div id="accordion-calendar">
+                    <!-- Calendar days will be injected here by JS -->
+                </div>
+            </div>
+
+            <div id="booking-summary-container">
+                <div class="booking-summary">
+                    <h4>Booking Summary</h4>
+                    <p id="booking-summary-details"></p>
+                </div>
+                <button id="confirm-booking-btn" class="confirm-booking-btn">Confirm & Book Instantly</button>
+            </div>
         </div>
     </div>
-    
-    <!-- PROFILE MODAL -->
-    <div id="profile-modal" class="profile-modal">
-        <div class="profile-modal-content">
-            <span class="profile-close" onclick="closeProfileModal()">&times;</span>
-            <div class="profile-header">
-                <h2 id="profile-name">Tradesperson Name</h2>
-            </div>
-            <div class="profile-body">
-                <p><strong>Category:</strong> <span id="profile-category"></span></p>
-                <p><strong>Description:</strong> <span id="profile-description"></span></p>
-                <p><strong>Contact:</strong> <span id="profile-contact"></span></p>
-                <p><strong>Pricing:</strong> <span id="profile-pricing"></span></p>
+</div>
 
-                <div class="availability-calendar">
-                    <h3>Available Booking Slots</h3>
-                    <div id="accordion-calendar">
-                        <!-- Calendar days will be injected here by JS -->
-                    </div>
-                </div>
-                
-                <div id="booking-summary-container">
-                    <div class="booking-summary">
-                        <h4>Booking Summary</h4>
-                        <p id="booking-summary-details"></p>
-                    </div>
-                    <button id="confirm-booking-btn" class="confirm-booking-btn">Confirm & Book Instantly</button>
-                </div>
+<!-- LANDING PAGE VIEW -->
+<main id="landing-view">
+    <section class="landing-hero">
+        <div class="container">
+            <h1>Your Project, Sorted.</h1>
+            <p>Spotter.ie connects you with verified, trusted tradespeople across Ireland. From plumbing renovations to electrical repairs, find the right professional for your job, fast.</p>
+            <a href="#categories" class="cta-button">Find a Tradesperson</a>
+        </div>
+    </section>
+
+    <section id="categories" class="category-nav">
+        <div class="container">
+            <h2>Browse by Category</h2>
+            <div class="category-grid">
+                <a href="#" class="category-button" onclick="showListings('plumbing')">
+                    <div class="icon">🔧</div>
+                    <div>Plumbing</div>
+                </a>
+                <a href="#" class="category-button" onclick="showListings('electricians')">
+                    <div class="icon">⚡</div>
+                    <div>Electricians</div>
+                </a>
+                <a href="#" class="category-button" onclick="showListings('roofers')">
+                    <div class="icon">🏠</div>
+                    <div>Roofers</div>
+                </a>
+                <a href="#" class="category-button" onclick="showListings('painters')">
+                    <div class="icon">🎨</div>
+                    <div>Painters</div>
+                </a>
+                <a href="#" class="category-button" onclick="showListings('mechanics')">
+                    <div class="icon">🚗</div>
+                    <div>Mechanics</div>
+                </a>
+                <a href="#" class="category-button" onclick="showListings('builders')">
+                    <div class="icon">👷</div>
+                    <div>Builders</div>
+                </a>
             </div>
+        </div>
+    </section>
+</main>
+
+<!-- LISTINGS VIEW -->
+<main id="listings-view">
+    <div class="container">
+        <div class="listings-header">
+            <h1 id="listings-title">Category</h1>
+        </div>
+        <div id="tradesperson-list" class="tradesperson-grid">
+            <!-- Tradespeople will be injected here by JavaScript -->
         </div>
     </div>
+</main>
 
-    <!-- LANDING PAGE VIEW -->
-    <main id="landing-view">
-        <section class="landing-hero">
-            <div class="container">
-                <h1>Your Project, Sorted.</h1>
-                <p>Spotter.ie connects you with verified, trusted tradespeople across Ireland. From plumbing renovations to electrical repairs, find the right professional for your job, fast.</p>
-                <a href="#categories" class="cta-button">Find a Tradesperson</a>
-            </div>
-        </section>
+<footer>
+    <div class="container">
+        <p>&copy; 2026 Spotter.ie. All rights reserved.</p>
+    </div>
+</footer>
 
-        <section id="categories" class="category-nav">
-            <div class="container">
-                <h2>Browse by Category</h2>
-                <div class="category-grid">
-                    <a href="#" class="category-button" onclick="showListings('plumbing')">
-                        <div class="icon">🔧</div>
-                        <div>Plumbing</div>
-                    </a>
-                    <a href="#" class="category-button" onclick="showListings('electricians')">
-                        <div class="icon">⚡</div>
-                        <div>Electricians</div>
-                    </a>
-                    <a href="#" class="category-button" onclick="showListings('roofers')">
-                        <div class="icon">🏠</div>
-                        <div>Roofers</div>
-                    </a>
-                    <a href="#" class="category-button" onclick="showListings('painters')">
-                        <div class="icon">🎨</div>
-                        <div>Painters</div>
-                    </a>
-                    <a href="#" class="category-button" onclick="showListings('mechanics')">
-                        <div class="icon">🚗</div>
-                        <div>Mechanics</div>
-                    </a>
-                    <a href="#" class="category-button" onclick="showListings('builders')">
-                        <div class="icon">👷</div>
-                        <div>Builders</div>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
+<script>
+    // --- GLOBAL STATE ---
+    const bookingState = {
+        slots: {}
+    };
+    const currentBookingState = {
+        tradespersonId: null,
+        selectedDate: null,
+        selectedTime: null
+    };
 
-    <!-- LISTINGS VIEW -->
-    <main id="listings-view">
-        <div class="container">
-            <div class="listings-header">
-                <h1 id="listings-title">Category</h1>
-            </div>
-            <div id="tradesperson-list" class="tradesperson-grid">
-                <!-- Tradespeople will be injected here by JavaScript -->
-            </div>
-        </div>
-    </main>
+    // --- FAKE DATA ---
+    const tradespeopleData = {
+        plumbing: [
+            { id: 'tom-plumbing', name: 'Tom\'s Plumbing', description: 'Reliable and efficient plumbing services for all your home needs.', contact: 'tom@plumbing.ie | 087-123-4567', pricing: 'Call for a free quote.' },
+            { id: 'jane-pipe-dreams', name: 'Jane\'s Pipe Dreams', description: 'Expert in all types of plumbing repairs and installations. Fully licensed and insured.', contact: 'jane@pipedreams.ie | 086-987-6543', pricing: '€50/hour.' },
+            { id: 'mike-leak-busters', name: 'Mike\'s Leak Busters', description: 'Specializing in fast leak detection and repair. Emergency service available.', contact: 'mike@leakbusters.ie | 085-555-1234', pricing: '€60/hour.' },
+        ],
+        electricians: [
+            { id: 'electric-joe', name: 'Electric Joe', description: 'Licensed electrician with over 10 years of experience. Safe and reliable service.', contact: 'joe@electric.ie | 087-234-5678', pricing: '€60/hour.' },
+            { id: 'sparky-solutions', name: 'Sparky Solutions', description: 'Electrical installations and repairs for homes and businesses. PAT testing also available.', contact: 'sparky@solutions.ie | 086-345-6789', pricing: '€70/hour.' },
+        ],
+        roofers: [{ id: 'roofmaster-ltd', name: 'RoofMaster Ltd.', description: 'Comprehensive roofing services for all types of roofs. Free estimates.', contact: 'roofmaster@roofing.ie | 087-345-1111', pricing: 'Call for a quote.' }],
+        painters: [{ id: 'colorful-creations', name: 'Colorful Creations', description: 'Interior and exterior painting services. High-quality finish.', contact: 'colorful@creations.ie | 087-456-6666', pricing: '€25/m2.' }],
+        mechanics: [{ id: 'autofix-garage', name: 'AutoFix Garage', description: 'Full-service auto repair and maintenance. Honest and reliable.', contact: 'autofix@garage.ie | 087-567-1111', pricing: 'Call for a quote.' }],
+        builders: [{ id: 'buildright-construction', name: 'BuildRight Construction', description: 'Residential and commercial building services. From planning to completion.', contact: 'buildright@construction.ie | 087-678-6666', pricing: 'Call for a quote.' }],
+    };
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Spotter.ie. All rights reserved.</p>
-        </div>
-    </footer>
+    // --- VIEW MANAGEMENT ---
+    function showView(viewName) {
+        document.getElementById('landing-view').style.display = viewName === 'landing' ? 'block' : 'none';
+        document.getElementById('listings-view').classList.toggle('active', viewName === 'listings');
+        if (viewName === 'landing') window.scrollTo(0, 0);
+    }
 
-    <script>
-        // --- GLOBAL STATE ---
-        const bookingState = { slots: {} };
-        const currentBookingState = { tradespersonId: null, selectedDate: null, selectedTime: null };
+    function showListings(category) {
+        const view = document.getElementById('listings-view');
+        const titleEl = document.getElementById('listings-title');
+        const listEl = document.getElementById('tradesperson-list');
+        titleEl.innerText = category.charAt(0).toUpperCase() + category.slice(1);
+        listEl.innerHTML = '';
+        const people = tradespeopleData[category] || [];
+        people.forEach(person => {
+            const card = document.createElement('div');
+            card.className = 'tradesperson-card';
+            card.onclick = () => openProfileModal(person, category);
+            card.innerHTML = `<h3>${person.name}</h3><p>${person.description}</p><p class="pricing">${person.pricing}</p>`;
+            listEl.appendChild(card);
+        });
+        showView('listings');
+    }
 
-        // --- FAKE DATA ---
-        const tradespeopleData = {
-            plumbing: [
-                { id: 'tom-plumbing', name: 'Tom\'s Plumbing', description: 'Reliable and efficient plumbing services for all your home needs.', contact: 'tom@plumbing.ie | 087-123-4567', pricing: 'Call for a free quote.' },
-                { id: 'jane-pipe-dreams', name: 'Jane\'s Pipe Dreams', description: 'Expert in all types of plumbing repairs and installations. Fully licensed and insured.', contact: 'jane@pipedreams.ie | 086-987-6543', pricing: '€50/hour.' },
-                { id: 'mike-leak-busters', name: 'Mike\'s Leak Busters', description: 'Specializing in fast leak detection and repair. Emergency service available.', contact: 'mike@leakbusters.ie | 085-555-1234', pricing: '€60/hour.' },
-            ],
-            electricians: [
-                { id: 'electric-joe', name: 'Electric Joe', description: 'Licensed electrician with over 10 years of experience. Safe and reliable service.', contact: 'joe@electric.ie | 087-234-5678', pricing: '€60/hour.' },
-                { id: 'sparky-solutions', name: 'Sparky Solutions', description: 'Electrical installations and repairs for homes and businesses. PAT testing also available.', contact: 'sparky@solutions.ie | 086-345-6789', pricing: '€70/hour.' },
-            ],
-            roofers: [{ id: 'roofmaster-ltd', name: 'RoofMaster Ltd.', description: 'Comprehensive roofing services for all types of roofs. Free estimates.', contact: 'roofmaster@roofing.ie | 087-345-1111', pricing: 'Call for a quote.' }],
-            painters: [{ id: 'colorful-creations', name: 'Colorful Creations', description: 'Interior and exterior painting services. High-quality finish.', contact: 'colorful@creations.ie | 087-456-6666', pricing: '€25/m2.' }],
-            mechanics: [{ id: 'autofix-garage', name: 'AutoFix Garage', description: 'Full-service auto repair and maintenance. Honest and reliable.', contact: 'autofix@garage.ie | 087-567-1111', pricing: 'Call for a quote.' }],
-            builders: [{ id: 'buildright-construction', name: 'BuildRight Construction', description: 'Residential and commercial building services. From planning to completion.', contact: 'buildright@construction.ie | 087-678-6666', pricing: 'Call for a quote.' }],
-        };
+    // --- MODAL MANAGEMENT ---
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
 
-        // --- VIEW MANAGEMENT ---
-        function showView(viewName) {
-            document.getElementById('landing-view').style.display = viewName === 'landing' ? 'block' : 'none';
-            document.getElementById('listings-view').classList.toggle('active', viewName === 'listings');
-            if (viewName === 'landing') window.scrollTo(0, 0);
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    function togglePricingInfo() {
+        const userType = document.getElementById('user-type').value;
+        document.getElementById('tradesperson-pricing').style.display = userType === 'tradesperson' ? 'block' : 'none';
+    }
+
+    function handleSignup(event) {
+        event.preventDefault();
+        alert('Thank you for signing up! This is a demo.');
+        closeModal('signup-modal');
+    }
+
+    function handleFormSubmit(event, formType) {
+        event.preventDefault();
+        alert(`Thank you! Your ${formType} request has been received.`);
+        closeModal('signin-modal');
+        event.target.reset();
+    }
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) event.target.style.display = 'none';
+        if (event.target.classList.contains('profile-modal')) closeProfileModal();
+    };
+
+    // --- PROFILE MODAL & ACCORDION CALENDAR LOGIC ---
+    function openProfileModal(person, category) {
+        currentBookingState.tradespersonId = person.id;
+        currentBookingState.selectedDate = null;
+        currentBookingState.selectedTime = null;
+        if (!bookingState.slots[person.id]) {
+            bookingState.slots[person.id] = {};
         }
-        function showListings(category) {
-            const view = document.getElementById('listings-view');
-            const titleEl = document.getElementById('listings-title');
-            const listEl = document.getElementById('tradesperson-list');
-            titleEl.innerText = category.charAt(0).toUpperCase() + category.slice(1);
-            listEl.innerHTML = '';
-            const people = tradespeopleData[category] || [];
-            people.forEach(person => {
-                const card = document.createElement('div');
-                card.className = 'tradesperson-card';
-                card.onclick = () => openProfileModal(person, category);
-                card.innerHTML = `<h3>${person.name}</h3><p>${person.description}</p><p class="pricing">${person.pricing}</p>`;
-                listEl.appendChild(card);
-            });
-            showView('listings');
-        }
-
-        // --- MODAL MANAGEMENT ---
-        function openModal(modalId) { document.getElementById(modalId).style.display = 'block'; }
-        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
-        function togglePricingInfo() { const userType = document.getElementById('user-type').value; document.getElementById('tradesperson-pricing').style.display = userType === 'tradesperson' ? 'block' : 'none'; }
-        function handleSignup(event) { event.preventDefault(); alert('Thank you for signing up! This is a demo.'); closeModal('signup-modal'); }
-        function handleFormSubmit(event, formType) { event.preventDefault(); alert(`Thank you! Your ${formType} request has been received.`); closeModal('signin-modal'); event.target.reset(); }
-        window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.style.display = 'none'; if (event.target.classList.contains('profile-modal')) closeProfileModal(); };
-
-        // --- PROFILE MODAL & ACCORDION CALENDAR LOGIC ---
-        function openProfileModal(person, category) {
-            currentBookingState.tradespersonId = person.id;
-            currentBookingState.selectedDate = null;
-            currentBookingState.selectedTime = null;
-            
-            if (!bookingState.slots[person.id]) bookingState.slots[person.id] = {};
-
-            document.getElementById('profile-name').innerText = person.name;
-            document.getElementById('profile-category').innerText = category.charAt(0).toUpperCase() + category.slice(1);
-            document.getElementById('profile-description').innerText = person.description;
-            document.getElementById('profile-contact').innerText = person.contact;
-            document.getElementById('profile-pricing').innerText = person.pricing;
-            document.getElementById('booking-summary-container').style.display = 'none';
-            
-            renderAccordionCalendar();
-            document.getElementById('profile-modal').style.display = 'block';
-        }
-        function closeProfileModal() { document.getElementById('profile-modal').style.display = 'none'; }
         
-        function renderAccordionCalendar() {
-            const calendarEl = document.getElementById('accordion-calendar');
-            const today = new Date();
-            calendarEl.innerHTML = ''; // Clear previous calendar
+        document.getElementById('profile-name').innerText = person.name;
+        document.getElementById('profile-category').innerText = category.charAt(0).toUpperCase() + category.slice(1);
+        document.getElementById('profile-description').innerText = person.description;
+        document.getElementById('profile-contact').innerText = person.contact;
+        document.getElementById('profile-pricing').innerText = person.pricing;
+        document.getElementById('booking-summary-container').style.display = 'none';
+        
+        renderAccordionCalendar();
+        document.getElementById('profile-modal').style.display = 'block';
+    }
 
-            for (let i = 0; i < 7; i++) {
-                const futureDate = new Date(today);
-                futureDate.setDate(today.getDate() + i);
-                const dateStr = futureDate.toISOString().split('T')[0]; // YYYY-MM-DD
-                const dayName = futureDate.toLocaleDateString('en-IE', { weekday: 'long', day: 'numeric' });
+    function closeProfileModal() {
+        document.getElementById('profile-modal').style.display = 'none';
+    }
 
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day';
-                dayEl.innerHTML = `
-                    <div class="day-header">${dayName}</div>
-                    <div class="time-slots" data-date="${dateStr}">
-                        <!-- Time slots will be injected here -->
-                    </div>
-                `;
-                
-                calendarEl.appendChild(dayEl);
-                renderTimeSlots(dayEl.querySelector('.time-slots'), dateStr);
-            }
-        }
+    function renderAccordionCalendar() {
+        const calendarEl = document.getElementById('accordion-calendar');
+        const today = new Date();
+        calendarEl.innerHTML = ''; // Clear previous calendar
 
-        function renderTimeSlots(slotsContainerEl, dateStr) {
-            const tradespersonId = currentBookingState.tradespersonId;
-            const times = ['9:00 AM', '11:00 AM', '2:00 PM', '4:00 PM'];
+        for (let i = 0; i < 7; i++) {
+            const futureDate = new Date(today);
+            futureDate.setDate(today.getDate() + i);
+            const dateStr = futureDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            const dayName = futureDate.toLocaleDateString('en-IE', { weekday: 'long', day: 'numeric' });
 
-            if (!bookingState.slots[tradespersonId][dateStr]) {
-                bookingState.slots[tradespersonId][dateStr] = {};
-                const randomTaken = times.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2));
-                randomTaken(time => bookingState.slots[tradespersonId][dateStr][time] = true);
-            }
-            
-            let html = '';
-            times.forEach(time => {
-                const isTaken = bookingState.slots[tradespersonId][dateStr][time];
-                const classes = isTaken ? 'time-slot taken' : 'time-slot';
-                html += `<a href="#" class="${classes}" onclick="selectTime(event, '${dateStr}', '${time}', ${!isAvailable})">${time}</a>`;
-            });
-            slotsContainerEl.innerHTML = html;
+            const dayEl = document.createElement('div');
+            dayEl.className = 'calendar-day';
+            dayEl.innerHTML = `
+                <div class="day-header">${dayName}</div>
+                <div class="time-slots" data-date="${dateStr}">
+                    <!-- Time slots will be injected here -->
+                </div>
+            `;
+            calendarEl.appendChild(dayEl);
+            renderTimeSlots(dayEl.querySelector('.time-slots'), dateStr);
         }
 
         // Attach a single event listener to the calendar container for event delegation
-        document.getElementById('accordion-calendar').addEventListener('click', function(event) {
-            // Check if a day-header was clicked
+        calendarEl.addEventListener('click', function(event) {
             if (event.target.classList.contains('day-header')) {
                 const allDays = this.querySelectorAll('.calendar-day');
                 const clickedDay = event.target.closest('.calendar-day');
-
+                
                 // Close all other days
                 allDays.forEach(day => day.classList.remove('active'));
                 
@@ -409,48 +703,75 @@
                 clickedDay.classList.add('active');
             }
         });
+    }
 
-        function selectTime(event, dateStr, time, isAvailable) {
-            if (!isAvailable) {
-                event.preventDefault();
-                return;
+    function renderTimeSlots(slotsContainerEl, dateStr) {
+        const tradespersonId = currentBookingState.tradespersonId;
+        const times = ['9:00 AM', '11:00 AM', '2:00 PM', '4:00 PM'];
+
+        // Initialize slots for this date if they don't exist
+        if (!bookingState.slots[tradespersonId][dateStr]) {
+            bookingState.slots[tradespersonId][dateStr] = {};
+            // Randomly mark some slots as taken for demo purposes
+            const numTaken = Math.floor(Math.random() * 3); // 0, 1, or 2 slots taken
+            const shuffledTimes = [...times].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < numTaken; i++) {
+                bookingState.slots[tradespersonId][dateStr][shuffledTimes[i]] = true;
             }
-            
-            event.preventDefault();
-            
-            currentBookingState.selectedDate = dateStr;
-            currentBookingState.selectedTime = time;
-            
-            // Update UI to show selected time
-            document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
-            event.target.classList.add('selected');
-            
-            // Show summary
-            const personName = document.getElementById('profile-name').innerText;
-            const detailsEl = document.getElementById('booking-summary-details');
-            detailsEl.innerHTML = `
-                <strong>Tradesperson:</strong> ${personName}<br>
-                <strong>Date:</strong> ${new Date(dateStr).toLocaleDateString('en-IE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}<br>
-                <strong>Time:</strong> ${time}
-            `;
-            document.getElementById('booking-summary-container').style.display = 'block';
         }
 
-        document.getElementById('confirm-booking-btn').onclick = function() {
-            const { tradespersonId, selectedDate, selectedTime } = currentBookingState;
-            const personName = document.getElementById('profile-name').innerText;
-            
-            bookingState.slots[tradespersonId][selectedDate][selectedTime] = true;
-            
-            alert(`Booking Confirmed!\n\nYou have booked ${personName} on ${new Date(selectedDate).toDateString()} at ${selectedTime}.\n\nThis slot is now unavailable to others.`);
-            
-            // Reset view
-            document.getElementById('booking-summary-container').style.display = 'none';
-            
-            // Re-render the calendar to show the updated slot status
-            renderAccordionCalendar();
-        };
+        let html = '';
+        times.forEach(time => {
+            const isTaken = bookingState.slots[tradespersonId][dateStr][time];
+            const classes = isTaken ? 'time-slot taken' : 'time-slot';
+            // The selectTime function is called on click, passing the availability
+            html += `<a href="#" class="${classes}" onclick="selectTime(event, '${dateStr}', '${time}', ${!isTaken})">${time}</a>`;
+        });
+        slotsContainerEl.innerHTML = html;
+    }
 
-    </script>
+    function selectTime(event, dateStr, time, isAvailable) {
+        event.preventDefault();
+        if (!isAvailable) {
+            alert('This time slot is already taken.');
+            return;
+        }
+
+        currentBookingState.selectedDate = dateStr;
+        currentBookingState.selectedTime = time;
+
+        // Update UI to show selected time
+        document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+        event.target.classList.add('selected');
+
+        // Show summary
+        const personName = document.getElementById('profile-name').innerText;
+        const detailsEl = document.getElementById('booking-summary-details');
+        detailsEl.innerHTML = `
+            <strong>Tradesperson:</strong> ${personName}<br>
+            <strong>Date:</strong> ${new Date(dateStr).toLocaleDateString('en-IE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}<br>
+            <strong>Time:</strong> ${time}
+        `;
+        document.getElementById('booking-summary-container').style.display = 'block';
+    }
+
+    document.getElementById('confirm-booking-btn').onclick = function() {
+        const { tradespersonId, selectedDate, selectedTime } = currentBookingState;
+        const personName = document.getElementById('profile-name').innerText;
+
+        // Mark the slot as taken
+        bookingState.slots[tradespersonId][selectedDate][selectedTime] = true;
+
+        alert(`Booking Confirmed!\n\nYou have booked ${personName} on ${new Date(selectedDate).toDateString()} at ${selectedTime}.\n\nThis slot is now unavailable to others.`);
+
+        // Reset view
+        document.getElementById('booking-summary-container').style.display = 'none';
+        
+        // Re-render the calendar to show the updated slot status
+        renderAccordionCalendar();
+    };
+
+</script>
+
 </body>
 </html>
