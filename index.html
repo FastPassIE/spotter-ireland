@@ -233,7 +233,7 @@
             color: #bbb;
         }
 
-        /* --- NEW ACCORDION CALENDAR STYLES --- */
+        /* --- CALENDAR STYLES --- */
         .availability-calendar {
             margin-top: 2rem;
         }
@@ -643,7 +643,7 @@
         if (event.target.classList.contains('profile-modal')) closeProfileModal();
     };
 
-    // --- PROFILE MODAL & ACCORDION CALENDAR LOGIC ---
+    // --- PROFILE MODAL & CALENDAR LOGIC ---
     function openProfileModal(person, category) {
         currentBookingState.tradespersonId = person.id;
         currentBookingState.selectedDate = null;
@@ -689,22 +689,8 @@
             calendarEl.appendChild(dayEl);
             renderTimeSlots(dayEl.querySelector('.time-slots'), dateStr);
         }
-
-        // Attach a single event listener to the calendar container for event delegation
-        calendarEl.addEventListener('click', function(event) {
-            if (event.target.classList.contains('day-header')) {
-                const allDays = this.querySelectorAll('.calendar-day');
-                const clickedDay = event.target.closest('.calendar-day');
-                
-                // Close all other days
-                allDays.forEach(day => day.classList.remove('active'));
-                
-                // Open the clicked day
-                clickedDay.classList.add('active');
-            }
-        });
     }
-
+    
     function renderTimeSlots(slotsContainerEl, dateStr) {
         const tradespersonId = currentBookingState.tradespersonId;
         const times = ['9:00 AM', '11:00 AM', '2:00 PM', '4:00 PM'];
@@ -724,7 +710,6 @@
         times.forEach(time => {
             const isTaken = bookingState.slots[tradespersonId][dateStr][time];
             const classes = isTaken ? 'time-slot taken' : 'time-slot';
-            // The selectTime function is called on click, passing the availability
             html += `<a href="#" class="${classes}" onclick="selectTime(event, '${dateStr}', '${time}', ${!isTaken})">${time}</a>`;
         });
         slotsContainerEl.innerHTML = html;
@@ -754,6 +739,26 @@
         `;
         document.getElementById('booking-summary-container').style.display = 'block';
     }
+
+    // --- EVENT LISTENER SETUP ---
+    // This listener is set up once and will handle clicks for all dynamically generated calendars.
+    document.getElementById('accordion-calendar').addEventListener('click', function(event) {
+        // Check if a day-header was clicked
+        if (event.target.classList.contains('day-header')) {
+            const allDays = this.querySelectorAll('.calendar-day');
+            const clickedDay = event.target.closest('.calendar-day');
+            
+            // Close all other days
+            allDays.forEach(day => {
+                if (day !== clickedDay) {
+                    day.classList.remove('active');
+                }
+            });
+            
+            // Toggle the clicked day
+            clickedDay.classList.toggle('active');
+        }
+    });
 
     document.getElementById('confirm-booking-btn').onclick = function() {
         const { tradespersonId, selectedDate, selectedTime } = currentBookingState;
