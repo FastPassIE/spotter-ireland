@@ -57,22 +57,44 @@
         .profile-close { color: #fff; position: absolute; top: 15px; right: 25px; font-size: 35px; font-weight: bold; cursor: pointer; }
         .profile-close:hover { color: #bbb; }
 
-        /* --- Calendar Styles --- */
+        /* --- NEW CALENDAR STYLES --- */
         .booking-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin: 20px 0; }
         .calendar-day-header { font-weight: bold; text-align: center; padding: 10px 0; border-bottom: 2px solid #eee; }
-        .calendar-day { aspect-ratio: 1; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #fff; border-radius: 4px; font-size: 0.9rem; transition: background-color 0.2s ease; }
+        .calendar-day { aspect-ratio: 1; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: #fff; border-radius: 4px; font-size: 0.9rem; transition: background-color 0.2s ease; position: relative; }
         .calendar-day.other-month { color: #ccc; cursor: default; background-color: #f9f9f9; }
         .calendar-day:hover:not(.other-month) { background-color: #e9ecef; }
         .calendar-day.selected { background-color: #007bff; color: white; }
+        
+        .time-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            z-index: 10;
+            min-width: 120px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none; /* Hidden by default */
+        }
+        .time-dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee;
+        }
+        .time-dropdown-item:last-child { border-bottom: none; }
+        .time-dropdown-item:hover:not(.taken) { background-color: #f0f0f0; }
+        .time-dropdown-item.taken {
+            color: #999;
+            text-decoration: line-through;
+            cursor: not-allowed;
+        }
+        .time-dropdown-item.selected { background-color: #007bff; color: white; }
 
-        /* --- Time Slots Styles --- */
-        #booking-time-slots-container { margin-top: 20px; }
-        #booking-time-slots-container h4 { margin-bottom: 15px; }
-        .booking-time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
-        .time-slot { padding: 10px; border: 1px solid #007bff; background-color: #fff; color: #007bff; border-radius: 5px; cursor: pointer; text-align: center; transition: all 0.2s ease; }
-        .time-slot:hover:not(.taken) { background-color: #007bff; color: white; }
-        .time-slot.taken { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; cursor: not-allowed; text-decoration: line-through; }
-        .time-slot.selected { background-color: #28a745; color: white; border-color: #28a745; }
 
         /* --- Booking Summary & Confirmation --- */
         .booking-summary-container { margin-top: 25px; padding: 15px; background-color: #e9ecef; border-radius: 5px; }
@@ -164,11 +186,6 @@
                 <h3>Book an Appointment</h3>
                 <div id="booking-calendar"></div>
                 
-                <div id="booking-time-slots-container" style="display: none;">
-                    <h4>Available Times for <span id="selected-date-display"></span></h4>
-                    <div id="booking-time-slots" class="booking-time-slots"></div>
-                </div>
-
                 <div id="booking-summary-container" style="display: none;">
                     <div class="booking-summary">
                         <h4>Booking Summary</h4>
@@ -243,18 +260,9 @@
 
     <script>
         // --- GLOBAL STATE ---
-        const bookingState = {
-            // In a real app, this would be stored in a database.
-            // For this demo, it's stored in the browser's memory.
-            slots: {}
-        };
-        const currentBookingState = {
-            tradespersonId: null,
-            selectedDate: null,
-            selectedTime: null,
-            currentMonth: new Date().getMonth(),
-            currentYear: new Date().getFullYear()
-        };
+        const bookingState = { slots: {} };
+        const currentBookingState = { tradespersonId: null, selectedDate: null, selectedTime: null };
+        let openDropdown = null; // To track the currently open dropdown
 
         // --- FAKE DATA ---
         const tradespeopleData = {
@@ -267,183 +275,137 @@
                 { id: 'electric-joe', name: 'Electric Joe', description: 'Licensed electrician with over 10 years of experience. Safe and reliable service.', contact: 'joe@electric.ie | 087-234-5678', pricing: '€60/hour.' },
                 { id: 'sparky-solutions', name: 'Sparky Solutions', description: 'Electrical installations and repairs for homes and businesses. PAT testing also available.', contact: 'sparky@solutions.ie | 086-345-6789', pricing: '€70/hour.' },
             ],
-            roofers: [
-                { id: 'roofmaster-ltd', name: 'RoofMaster Ltd.', description: 'Comprehensive roofing services for all types of roofs. Free estimates.', contact: 'roofmaster@roofing.ie | 087-345-1111', pricing: 'Call for a quote.' },
-            ],
-            painters: [
-                { id: 'colorful-creations', name: 'Colorful Creations', description: 'Interior and exterior painting services. High-quality finish.', contact: 'colorful@creations.ie | 087-456-6666', pricing: '€25/m2.' },
-            ],
-            mechanics: [
-                { id: 'autofix-garage', name: 'AutoFix Garage', description: 'Full-service auto repair and maintenance. Honest and reliable.', contact: 'autofix@garage.ie | 087-567-1111', pricing: 'Call for a quote.' },
-            ],
-            builders: [
-                { id: 'buildright-construction', name: 'BuildRight Construction', description: 'Residential and commercial building services. From planning to completion.', contact: 'buildright@construction.ie | 087-678-6666', pricing: 'Call for a quote.' },
-            ]
+            roofers: [{ id: 'roofmaster-ltd', name: 'RoofMaster Ltd.', description: 'Comprehensive roofing services for all types of roofs. Free estimates.', contact: 'roofmaster@roofing.ie | 087-345-1111', pricing: 'Call for a quote.' }],
+            painters: [{ id: 'colorful-creations', name: 'Colorful Creations', description: 'Interior and exterior painting services. High-quality finish.', contact: 'colorful@creations.ie | 087-456-6666', pricing: '€25/m2.' }],
+            mechanics: [{ id: 'autofix-garage', name: 'AutoFix Garage', description: 'Full-service auto repair and maintenance. Honest and reliable.', contact: 'autofix@garage.ie | 087-567-1111', pricing: 'Call for a quote.' }],
+            builders: [{ id: 'buildright-construction', name: 'BuildRight Construction', description: 'Residential and commercial building services. From planning to completion.', contact: 'buildright@construction.ie | 087-678-6666', pricing: 'Call for a quote.' }],
         };
 
         // --- VIEW MANAGEMENT ---
         function showView(viewName) {
             document.getElementById('landing-view').style.display = viewName === 'landing' ? 'block' : 'none';
             document.getElementById('listings-view').classList.toggle('active', viewName === 'listings');
-            if (viewName === 'landing') {
-                window.scrollTo(0, 0);
-            }
+            if (viewName === 'landing') window.scrollTo(0, 0);
         }
-
         function showListings(category) {
             const view = document.getElementById('listings-view');
             const titleEl = document.getElementById('listings-title');
             const listEl = document.getElementById('tradesperson-list');
-            
             titleEl.innerText = category.charAt(0).toUpperCase() + category.slice(1);
-            listEl.innerHTML = ''; // Clear previous listings
-
+            listEl.innerHTML = '';
             const people = tradespeopleData[category] || [];
             people.forEach(person => {
                 const card = document.createElement('div');
                 card.className = 'tradesperson-card';
                 card.onclick = () => openProfileModal(person, category);
-                card.innerHTML = `
-                    <h3>${person.name}</h3>
-                    <p>${person.description}</p>
-                    <p class="pricing">${person.pricing}</p>
-                `;
+                card.innerHTML = `<h3>${person.name}</h3><p>${person.description}</p><p class="pricing">${person.pricing}</p>`;
                 listEl.appendChild(card);
             });
-
             showView('listings');
         }
 
         // --- MODAL MANAGEMENT ---
         function openModal(modalId) { document.getElementById(modalId).style.display = 'block'; }
         function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
-        function togglePricingInfo() {
-            const userType = document.getElementById('user-type').value;
-            document.getElementById('tradesperson-pricing').style.display = userType === 'tradesperson' ? 'block' : 'none';
-        }
-        function handleSignup(event) {
-            event.preventDefault();
-            alert('Thank you for signing up! This is a demo, so no account has been created.');
-            closeModal('signup-modal');
-        }
-        function handleFormSubmit(event, formType) {
-            event.preventDefault();
-            alert(`Thank you! Your ${formType} request has been received (this is a demo).`);
-            closeModal('signin-modal');
-            event.target.reset();
-        }
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) { event.target.style.display = 'none'; }
-            if (event.target.classList.contains('profile-modal')) { closeProfileModal(); }
-        }
+        function togglePricingInfo() { const userType = document.getElementById('user-type').value; document.getElementById('tradesperson-pricing').style.display = userType === 'tradesperson' ? 'block' : 'none'; }
+        function handleSignup(event) { event.preventDefault(); alert('Thank you for signing up! This is a demo.'); closeModal('signup-modal'); }
+        function handleFormSubmit(event, formType) { event.preventDefault(); alert(`Thank you! Your ${formType} request has been received.`); closeModal('signin-modal'); event.target.reset(); }
+        window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.style.display = 'none'; if (event.target.classList.contains('profile-modal')) closeProfileModal(); };
 
-        // --- PROFILE MODAL & BOOKING LOGIC ---
+        // --- PROFILE MODAL & NEW BOOKING LOGIC ---
         function openProfileModal(person, category) {
             currentBookingState.tradespersonId = person.id;
-            currentBookingState.selectedDate = null;
-            currentBookingState.selectedTime = null;
-            
-            if (!bookingState.slots[person.id]) { bookingState.slots[person.id] = {}; }
-
+            if (!bookingState.slots[person.id]) bookingState.slots[person.id] = {};
             document.getElementById('profile-name').innerText = person.name;
             document.getElementById('profile-category').innerText = category.charAt(0).toUpperCase() + category.slice(1);
             document.getElementById('profile-description').innerText = person.description;
             document.getElementById('profile-contact').innerText = person.contact;
             document.getElementById('profile-pricing').innerText = person.pricing;
-
-            // Reset booking view
-            document.getElementById('booking-time-slots-container').style.display = 'none';
             document.getElementById('booking-summary-container').style.display = 'none';
-
             renderCalendar();
             document.getElementById('profile-modal').style.display = 'block';
         }
-
-        function closeProfileModal() {
-            document.getElementById('profile-modal').style.display = 'none';
-        }
+        function closeProfileModal() { document.getElementById('profile-modal').style.display = 'none'; if(openDropdown) openDropdown.style.display = 'none'; }
         
         function renderCalendar() {
             const calendarEl = document.getElementById('booking-calendar');
-            const month = currentBookingState.currentMonth;
-            const year = currentBookingState.currentYear;
+            const month = new Date().getMonth();
+            const year = new Date().getFullYear();
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const daysInPrevMonth = new Date(year, month, 0).getDate();
-
             let html = '';
             const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             dayNames.forEach(day => html += `<div class="calendar-day-header">${day}</div>`);
-
-            for (let i = firstDay - 1; i >= 0; i--) {
-                html += `<div class="calendar-day other-month">${daysInPrevMonth - i}</div>`;
-            }
+            for (let i = firstDay - 1; i >= 0; i--) html += `<div class="calendar-day other-month"></div>`;
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const classes = 'calendar-day';
-                if (dateStr === currentBookingState.selectedDate) classes += ' selected';
-                html += `<div class="${classes}" data-date="${dateStr}" onclick="selectDate('${dateStr}')">${day}</div>`;
-            }
-            const totalCells = calendarEl.children.length - 7;
-            const remainingCells = 42 - totalCells;
-            for (let day = 1; day <= remainingCells; day++) {
-                html += `<div class="calendar-day other-month">${day}</div>`;
+                html += `
+                    <div class="calendar-day" data-date="${dateStr}" onclick="handleDayClick(event, '${dateStr}')">
+                        ${day}
+                        <div class="time-dropdown" id="dropdown-${dateStr}"></div>
+                    </div>
+                `;
             }
             calendarEl.innerHTML = html;
         }
 
-        function selectDate(dateStr) {
-            currentBookingState.selectedDate = dateStr;
-            currentBookingState.selectedTime = null;
-            renderCalendar();
-            renderTimeSlots(dateStr);
+        function handleDayClick(event, dateStr) {
+            event.stopPropagation();
+            const dropdown = document.getElementById(`dropdown-${dateStr}`);
+            
+            // If another dropdown is open, close it first
+            if (openDropdown && openDropdown !== dropdown) {
+                openDropdown.style.display = 'none';
+            }
+            
+            // Toggle current dropdown
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+                openDropdown = null;
+            } else {
+                renderTimeDropdown(dropdown, dateStr);
+                dropdown.style.display = 'block';
+                openDropdown = dropdown;
+            }
         }
-        
-        function renderTimeSlots(dateStr) {
-            const container = document.getElementById('booking-time-slots-container');
-            const slotsEl = document.getElementById('booking-time-slots');
+
+        function renderTimeDropdown(dropdownEl, dateStr) {
             const tradespersonId = currentBookingState.tradespersonId;
             const times = ['09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-
+            
             if (!bookingState.slots[tradespersonId][dateStr]) {
                 bookingState.slots[tradespersonId][dateStr] = {};
-                // Simulate some pre-booked slots
-                const randomTaken = times.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 4));
+                const randomTaken = times.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 3) + 1);
                 randomTaken(time => bookingState.slots[tradespersonId][dateStr][time] = true);
             }
             
             let html = '';
             times.forEach(time => {
                 const isTaken = bookingState.slots[tradespersonId][dateStr][time];
-                const classes = isTaken ? 'time-slot taken' : 'time-slot';
-                if (time === currentBookingState.selectedTime) classes += ' selected';
-                html += `<div class="${classes}" onclick="selectTime('${time}', ${!isTaken})">${time} ${isTaken ? '(Booked)' : ''}</div>`;
+                const classes = isTaken ? 'time-dropdown-item taken' : 'time-dropdown-item';
+                html += `<div class="${classes}" onclick="selectTime('${dateStr}', '${time}', ${!isTaken})">${time} ${isTaken ? '(Booked)' : ''}</div>`;
             });
-
-            document.getElementById('selected-date-display').innerText = new Date(dateStr).toDateString();
-            slotsEl.innerHTML = html;
-            container.style.display = 'block';
-            document.getElementById('booking-summary-container').style.display = 'none';
+            dropdownEl.innerHTML = html;
         }
 
-        function selectTime(time, isAvailable) {
+        function selectTime(dateStr, time, isAvailable) {
             if (!isAvailable) return;
-            currentBookingState.selectedTime = time;
-            renderTimeSlots(currentBookingState.selectedDate);
-            renderBookingSummary();
-        }
-
-        function renderBookingSummary() {
-            const container = document.getElementById('booking-summary-container');
-            const detailsEl = document.getElementById('booking-summary-details');
-            const personName = document.getElementById('profile-name').innerText;
             
+            currentBookingState.selectedDate = dateStr;
+            currentBookingState.selectedTime = time;
+            
+            // Close the dropdown
+            if(openDropdown) openDropdown.style.display = 'none';
+            
+            // Show summary
+            const personName = document.getElementById('profile-name').innerText;
+            const detailsEl = document.getElementById('booking-summary-details');
             detailsEl.innerHTML = `
                 <strong>Tradesperson:</strong> ${personName}<br>
-                <strong>Date:</strong> ${new Date(currentBookingState.selectedDate).toDateString()}<br>
-                <strong>Time:</strong> ${currentBookingState.selectedTime}
+                <strong>Date:</strong> ${new Date(dateStr).toDateString()}<br>
+                <strong>Time:</strong> ${time}
             `;
-            container.style.display = 'block';
+            document.getElementById('booking-summary-container').style.display = 'block';
         }
 
         document.getElementById('confirm-booking-btn').onclick = function() {
@@ -455,10 +417,19 @@
             alert(`Booking Confirmed!\n\nYou have booked ${personName} on ${new Date(selectedDate).toDateString()} at ${selectedTime}.\n\nThis slot is now unavailable to others.`);
             
             // Reset the modal view
-            document.getElementById('booking-time-slots-container').style.display = 'none';
             document.getElementById('booking-summary-container').style.display = 'none';
-            renderTimeSlots(selectedDate); // Re-render to show the slot as taken
+            // Re-render the dropdown for that day to show the new booking status
+            const dropdown = document.getElementById(`dropdown-${selectedDate}`);
+            if(dropdown) renderTimeDropdown(dropdown, selectedDate);
         };
+
+        // Close dropdowns when clicking outside the calendar
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.booking-calendar') && openDropdown) {
+                openDropdown.style.display = 'none';
+                openDropdown = null;
+            }
+        });
 
     </script>
 </body>
