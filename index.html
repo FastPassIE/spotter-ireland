@@ -390,7 +390,7 @@
             times.forEach(time => {
                 const isTaken = bookingState.slots[tradespersonId][dateStr][time];
                 const classes = isTaken ? 'time-slot taken' : 'time-slot';
-                html += `<a href="#" class="${classes}" onclick="selectTime('${dateStr}', '${time}', ${!isTaken})">${time}</a>`;
+                html += `<a href="#" class="${classes}" onclick="selectTime(event, '${dateStr}', '${time}', ${!isAvailable})">${time}</a>`;
             });
             slotsContainerEl.innerHTML = html;
         }
@@ -410,8 +410,12 @@
             }
         });
 
-        function selectTime(dateStr, time, isAvailable) {
-            if (!isAvailable) return;
+        function selectTime(event, dateStr, time, isAvailable) {
+            if (!isAvailable) {
+                event.preventDefault();
+                return;
+            }
+            
             event.preventDefault();
             
             currentBookingState.selectedDate = dateStr;
